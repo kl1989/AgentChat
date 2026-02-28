@@ -23,7 +23,7 @@ const agentCardStore = useAgentCardStore()
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
-const itemName = ref("智言平台")
+const itemName = ref("智能平台")
 const showAppCenterMenu = ref(false)
 let appCenterHoverTimer: any = null
 
