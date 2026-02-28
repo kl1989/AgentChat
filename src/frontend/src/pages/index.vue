@@ -302,36 +302,7 @@ watch(
               </template>
             </el-menu-item>
           </el-menu>
-          
-          <!-- 底部帮助链接 -->
-          <div class="sidebar-footer">
-            <div class="help-links">
-              <a
-                href="https://github.com/Shy2593666979/AgentChat"
-                target="_blank"
-                class="help-link"
-                title="GitHub 仓库"
-              >
-                <img
-                  src="../assets/github.png"
-                  alt="GitHub"
-                  class="help-icon"
-                />
-              </a>
-              <a
-                href="https://shy2593666979.github.io/agentchat-docs/"
-                target="_blank"
-                class="help-link"
-                title="帮助文档"
-              >
-                <img
-                  src="../assets/help.png"
-                  alt="帮助文档"
-                  class="help-icon"
-                />
-              </a>
-            </div>
-          </div>
+                    
         </div>
       </el-col>
       <div class="content">
