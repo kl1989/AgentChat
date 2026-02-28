@@ -152,19 +152,6 @@ const goToRegister = () => {
             登录
           </el-button>
         </div>
-
-        <!-- 底部版本信息 -->
-        <div class="footer">
-          <div class="version-badge" title="AgentChat 版本">v2.3.0</div>
-          <div class="footer-icons">
-            <a href="https://github.com/Shy2593666979/AgentChat" target="_blank" class="icon-link" title="GitHub">
-              <img src="../../assets/github.png" alt="GitHub" class="icon-img" />
-            </a>
-            <a href="https://uawlh9wstr9.feishu.cn/wiki/QOaLwMDtBiiduWk4YtAcavEsnne" target="_blank" class="icon-link" title="帮助文档">
-              <img src="../../assets/help.png" alt="帮助文档" class="icon-img" />
-            </a>
-          </div>
-        </div>
       </div>
     </div>
   </div>
