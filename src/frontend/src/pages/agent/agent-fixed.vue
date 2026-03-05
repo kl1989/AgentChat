@@ -325,8 +325,7 @@ onMounted(() => {
     align-items: center;
     margin-bottom: 24px;
     background: white;
-    padding: 20px 24px;
-    border-radius: 12px;
+    padding: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     
     h2 {

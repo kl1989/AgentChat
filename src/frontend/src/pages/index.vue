@@ -324,7 +324,6 @@ watch(
     justify-content: space-between;
     align-items: center;
     height: 64px;
-    background: linear-gradient(180deg, #e0f2fe 0%, #dbeafe 100%);
     padding: 0 24px;
     box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
     position: relative;
@@ -676,7 +675,6 @@ watch(
       flex: 1;
       overflow-y: auto;
       background-color: #ffffff;
-      border-radius: 20px 0 0 0;
       margin-left: 4px;
       box-shadow: -4px 0 16px rgba(0, 0, 0, 0.05);
     }
