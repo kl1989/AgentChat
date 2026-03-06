@@ -25,6 +25,7 @@ from agentchat.services.rag_handler import RagHandler
 from agentchat.core.agents.mcp_agent import MCPAgent, MCPConfig
 from agentchat.api.services.mcp_server import MCPService
 from agentchat.tools.openapi_tool.adapter import OpenAPIToolAdapter
+from agentchat.core.agents.system_tools import SYSTEM_TOOLS
 
 
 class StreamAgentState(AgentState):
@@ -270,6 +271,9 @@ class GeneralAgent:
                     "name": db_tool.display_name,
                     "type": "工具"
                 }
+  
+        # 添加系统内置工具
+        tools.extend(SYSTEM_TOOLS)
 
         return tools
 
