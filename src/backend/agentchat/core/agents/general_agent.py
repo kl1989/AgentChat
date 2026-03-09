@@ -10,7 +10,7 @@ from langchain_core.tools import BaseTool, tool, StructuredTool
 from langchain.tools.tool_node import ToolCallRequest
 from langchain.agents import create_agent, AgentState
 from langgraph.config import get_stream_writer
-from langchain_core.messages import BaseMessage, ToolMessage, HumanMessage, AIMessageChunk
+from langchain_core.messages import BaseMessage, SystemMessage, ToolMessage, HumanMessage, AIMessageChunk
 from langchain.agents.middleware import LLMToolSelectorMiddleware, ModelRequest, ModelResponse, AgentMiddleware
 
 from agentchat.api.services.agent_skill import AgentSkillService
@@ -21,10 +21,11 @@ from agentchat.tools import AgentToolsWithName
 from agentchat.api.services.llm import LLMService
 from agentchat.core.models.manager import ModelManager
 from agentchat.api.services.tool import ToolService
-from agentchat.services.rag.handler import RagHandler
+from agentchat.services.rag_handler import RagHandler
 from agentchat.core.agents.mcp_agent import MCPAgent, MCPConfig
 from agentchat.api.services.mcp_server import MCPService
 from agentchat.tools.openapi_tool.adapter import OpenAPIToolAdapter
+from agentchat.core.agents.system_tools import SYSTEM_TOOLS
 
 
 class StreamAgentState(AgentState):
@@ -270,6 +271,9 @@ class GeneralAgent:
                     "name": db_tool.display_name,
                     "type": "工具"
                 }
+  
+        # 添加系统内置工具
+        tools.extend(SYSTEM_TOOLS)
 
         return tools
 
