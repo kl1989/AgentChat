@@ -1,0 +1,5972 @@
+[1mdiff --git a/docker/docker_config.yaml b/docker/docker_config.yaml[m
+[1mdeleted file mode 100644[m
+[1mindex 19daab5..0000000[m
+[1m--- a/docker/docker_config.yaml[m
+[1m+++ /dev/null[m
+[36m@@ -1,144 +0,0 @@[m
+[31m-# 服务配置[m
+[31m-server:[m
+[31m-  host: "127.0.0.1"[m
+[31m-  port: 7860[m
+[31m-  project_name: "AgentChat"[m
+[31m-  version: "2.4.0"[m
+[31m-[m
+[31m-# 数据库配置：MySQL (请根据实际配置更改 endpoint) 如果使用Docker启动服务，请将localhost改成@mysql:3306...[m
+[31m-# 格式：mysql+pymysql://<user>:<password>@<host>:<port>/<database>[m
+[31m-mysql:[m
+[31m-  endpoint: "mysql+pymysql://root:123456@mysql:3306/agentchat" # 同步连接配置[m
+[31m-  async_endpoint: "mysql+aiomysql://root:123456@mysql:3306/agentchat" # 异步连接配置[m
+[31m-[m
+[31m-# 缓存配置：Redis[m
+[31m-redis:[m
+[31m-  endpoint: "redis://redis:6379" # Redis 连接地址[m
+[31m-[m
+[31m-# 多模型服务配置 (LLM、Embedding、Rerank)[m
+[31m-multi_models:[m
+[31m-  # 对话模型配置[m
+[31m-  conversation_model:[m
+[31m-    api_key: "sk-fc40dd0604f04142a*******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"[m
+[31m-    model_name: "qwen-plus"[m
+[31m-  # 工具调用/Function Call 模型配置[m
+[31m-  tool_call_model:[m
+[31m-    api_key: "sk-fc40dd0604f04142a*******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"[m
+[31m-    model_name: "qwen-plus"[m
+[31m-  # 复杂推理模型配置[m
+[31m-  reasoning_model:[m
+[31m-    api_key: "sk-6d47d94f4c734357903********"[m
+[31m-    base_url: "https://api.deepseek.com/v1"[m
+[31m-    model_name: "deepseek-reasoner"[m
+[31m-  # 文生图模型配置[m
+[31m-  text2image:[m
+[31m-    api_key: "sk-fc40dd0604f04142a*******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis"[m
+[31m-    model_name: "wanx2.0-t2i-turbo"[m
+[31m-  # 多模态 (视觉) 模型配置[m
+[31m-  qwen_vl:[m
+[31m-    api_key: "sk-fc40dd0604f04142a*******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"[m
+[31m-    model_name: "qwen-vl-plus"[m
+[31m-[m
+[31m-  # Embedding 模型配置 (用于向量化)[m
+[31m-  embedding:[m
+[31m-    api_key: "sk-fc40dd0604f04142a*******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"[m
+[31m-    model_name: "text-embedding-v4"[m
+[31m-[m
+[31m-  # Rerank 模型配置 (用于重排序召回结果)[m
+[31m-  rerank:[m
+[31m-    api_key: "sk-fc40dd0604f04142a*******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank"[m
+[31m-    model_name: "gte-rerank-v2"[m
+[31m-[m
+[31m-[m
+[31m-# 外部工具 (Tool) 配置[m
+[31m-tools:[m
+[31m-  # 高德地图天气 API 配置[m
+[31m-  weather:[m
+[31m-    api_key: "fac0ad465078da96a*********"[m
+[31m-    endpoint: "https://restapi.amap.com/v3/weather/weatherInfo?parameters"[m
+[31m-  # Tavily 联网搜索 API 配置 (注意配额限制)[m
+[31m-  tavily:[m
+[31m-    api_key: "tvly-dev-RMf7KBCQLyXhn3*********"[m
+[31m-  # SerpApi 上的 Google Search API 配置[m
+[31m-  google:[m
+[31m-    api_key: "cdc3b207606843b4c883849c3a0f833c130578***********"[m
+[31m-  # 阿里云快递查询 API 配置[m
+[31m-  delivery:[m
+[31m-    api_key: "df695c94fc644d27***********"[m
+[31m-    endpoint: "https://qyexpress.market.alicloudapi.com/composite/queryexpress"[m
+[31m-  # BoCha 联网搜索 API 配置[m
+[31m-  bocha:[m
+[31m-    api_key: "sk-7ad6dd7213ae4a**********"[m
+[31m-    endpoint: "https://api.bochaai.com/v1/web-search"[m
+[31m-[m
+[31m-# RAG (检索增强生成) 配置[m
+[31m-rag:[m
+[31m-  enable_summary: False # 是否对知识库片段进行摘要[m
+[31m-  enable_elasticsearch: False # 是否启用 Elasticsearch 进行关键词搜索[m
+[31m-[m
+[31m-  retrival:[m
+[31m-    top_k: 5  # 知识库召回的最大数量[m
+[31m-    min_score: 0.2 # 知识库召回结果的最小相似度分数阈值[m
+[31m-[m
+[31m-  split:[m
+[31m-    chunk_size: 500 # 知识库文档分块的最大字符数[m
+[31m-    overlap_size: 100 # 文档分块之间的重叠字符数[m
+[31m-[m
+[31m-  # ES数据库配置，主要做关键词召回[m
+[31m-  elasticsearch:[m
+[31m-    hosts: "http://127.0.0.1:9200" # Elasticsearch 连接地址。如果 'enable_elasticsearch' 为 False，则不需要填写。[m
+[31m-[m
+[31m-  # 向量数据库配置 (Vector DB)[m
+[31m-  vector_db:[m
+[31m-    host: "127.0.0.1"[m
+[31m-    port: "19530"[m
+[31m-    mode: "chroma" # 向量库模式: standalone (Milvus), lite (轻量Milvus), chroma (ChromaDB)[m
+[31m-[m
+[31m-# 对象存储配置[m
+[31m-storage:[m
+[31m-  mode: "minio" # or "oss"[m
+[31m-[m
+[31m-  oss:[m
+[31m-    access_key_id: "LTAI5tL85x*************"[m
+[31m-    access_key_secret: "MiKCkLCx9qZzx********"[m
+[31m-    endpoint: "oss-cn-beijing.aliyuncs.com"[m
+[31m-    bucket_name: "agentchat" # OSS 存储桶名称[m
+[31m-    base_url: "https://agentchat.oss-cn-beijing.aliyuncs.com" # 访问基础 URL[m
+[31m-[m
+[31m-  minio:[m
+[31m-    access_key_id: "minioadmin"[m
+[31m-    access_key_secret: "minioadmin"[m
+[31m-    endpoint: "minio:9000"[m
+[31m-    bucket_name: "agentchat" # minio 存储桶名称[m
+[31m-    base_url: "http://127.0.0.1:9000/agentchat" # 访问基础 URL[m
+[31m-[m
+[31m-# 默认配置 (如图标 URL, 资源链接)[m
+[31m-default_config:[m
+[31m-  mcp_logo_url: "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/mcp/mcp.png" # Mcp默认图标 URL[m
+[31m-  tool_logo_url: "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/tools/default.png" # 工具默认图标 URL[m
+[31m-  agent_logo_url: "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/tools/bot.png" # Agent 默认图标 URL[m
+[31m-  mars_daily_url: "https://news.aibase.com/zh/news" # 外部新闻链接[m
+[31m-  memory_collection_name: "memory" # 记忆存储的集合名称[m
+[31m-[m
+[31m-# 扩展功能：微信配置 (不添加也可正常运行)[m
+[31m-wechat_config:[m
+[31m-  token: "LiangTian"[m
+[31m-  app_id: "wxf768871******"[m
+[31m-  secret: "063c4df15544235abd9******"[m
+[31m-[m
+[31m-# 追踪工具 Langfuse 配置 (目前版本可能未应用)[m
+[31m-langfuse:[m
+[31m-  trace_name: "agentchat"[m
+[31m-  host: "https://cloud.langfuse.com"[m
+[31m-  public_key: "pk-lf-q3e80e5f-da6d-40cb-8bc1-******" # Langfuse 公钥[m
+[31m-  secret_key: "sk-lf-q3e80e5f-da6d-40cb-8bc1-******" # Langfuse 私钥[m
+[31m-  user_id: "LiangTian" # 用户 ID[m
+[31m-[m
+[31m-# 接口白名单路径[m
+[31m-whitelist_paths: ["/api/v1/login"][m
+\ No newline at end of file[m
+[1mdiff --git a/docker/nginx_example.conf b/docker/nginx_example.conf[m
+[1mdeleted file mode 100644[m
+[1mindex f014a9c..0000000[m
+[1m--- a/docker/nginx_example.conf[m
+[1m+++ /dev/null[m
+[36m@@ -1,101 +0,0 @@[m
+[31m-# 🌐 AgentChat 前端 Nginx 生产环境配置[m
+[31m-[m
+[31m-user nginx;[m
+[31m-worker_processes auto;[m
+[31m-error_log /var/log/nginx/error.log notice;[m
+[31m-pid /var/run/nginx.pid;[m
+[31m-[m
+[31m-events {[m
+[31m-    worker_connections 1024;[m
+[31m-    use epoll;[m
+[31m-    multi_accept on;[m
+[31m-}[m
+[31m-[m
+[31m-http {[m
+[31m-    include /etc/nginx/mime.types;[m
+[31m-    default_type application/octet-stream;[m
+[31m-[m
+[31m-    # 🎨 日志格式[m
+[31m-    log_format main '$remote_addr - $remote_user [$time_local] "$request" '[m
+[31m-                    '$status $body_bytes_sent "$http_referer" '[m
+[31m-                    '"$http_user_agent" "$http_x_forwarded_for"';[m
+[31m-[m
+[31m-    access_log /var/log/nginx/access.log main;[m
+[31m-[m
+[31m-    # 🚀 性能优化[m
+[31m-    sendfile on;[m
+[31m-    tcp_nopush on;[m
+[31m-    tcp_nodelay on;[m
+[31m-    keepalive_timeout 65;[m
+[31m-    types_hash_max_size 2048;[m
+[31m-    client_max_body_size 100M;[m
+[31m-[m
+[31m-    # 🗜️ Gzip压缩[m
+[31m-    gzip on;[m
+[31m-    gzip_vary on;[m
+[31m-    gzip_min_length 1000;[m
+[31m-    gzip_proxied any;[m
+[31m-    gzip_comp_level 6;[m
+[31m-    gzip_types[m
+[31m-        application/atom+xml[m
+[31m-        application/geo+json[m
+[31m-        application/javascript[m
+[31m-        application/x-javascript[m
+[31m-        application/json[m
+[31m-        application/ld+json[m
+[31m-        application/manifest+json[m
+[31m-        application/rdf+xml[m
+[31m-        application/rss+xml[m
+[31m-        application/xhtml+xml[m
+[31m-        application/xml[m
+[31m-        font/eot[m
+[31m-        font/otf[m
+[31m-        font/ttf[m
+[31m-        image/svg+xml[m
+[31m-        text/css[m
+[31m-        text/javascript[m
+[31m-        text/plain[m
+[31m-        text/xml;[m
+[31m-[m
+[31m-    # 🛡️ 安全配置[m
+[31m-    server_tokens off;[m
+[31m-    add_header X-Frame-Options DENY;[m
+[31m-    add_header X-Content-Type-Options nosniff;[m
+[31m-    add_header X-XSS-Protection "1; mode=block";[m
+[31m-[m
+[31m-    server {[m
+[31m-        listen 8090;[m
+[31m-        server_name localhost;[m
+[31m-        root /usr/share/nginx/html;[m
+[31m-        index index.html;[m
+[31m-[m
+[31m-        # 🌍 前端静态文件[m
+[31m-        location / {[m
+[31m-            try_files $uri $uri/ /index.html;[m
+[31m-            [m
+[31m-            # 📦 静态资源缓存[m
+[31m-            location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {[m
+[31m-                expires 1y;[m
+[31m-                add_header Cache-Control "public, immutable";[m
+[31m-            }[m
+[31m-            [m
+[31m-            # 📝 HTML文件不缓存[m
+[31m-            location ~* \.html$ {[m
+[31m-                expires -1;[m
+[31m-                add_header Cache-Control "no-cache, no-store, must-revalidate";[m
+[31m-            }[m
+[31m-        }[m
+[31m-[m
+[31m-        # 🚫 安全配置[m
+[31m-        location ~ /\. {[m
+[31m-            deny all;[m
+[31m-        }[m
+[31m-[m
+[31m-        # 📊 健康检查[m
+[31m-        location /health {[m
+[31m-            access_log off;[m
+[31m-            return 200 "healthy\n";[m
+[31m-            add_header Content-Type text/plain;[m
+[31m-        }[m
+[31m-    }[m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/docker/start_linux.sh b/docker/start_linux.sh[m
+[1mdeleted file mode 100644[m
+[1mindex f0473d5..0000000[m
+[1m--- a/docker/start_linux.sh[m
+[1m+++ /dev/null[m
+[36m@@ -1,41 +0,0 @@[m
+[31m-#!/bin/bash[m
+[31m-[m
+[31m-# 🚀 AgentChat Docker 启动脚本[m
+[31m-# 快速启动所有服务[m
+[31m-[m
+[31m-set -e[m
+[31m-[m
+[31m-echo "🐳 启动 AgentChat Docker 服务..."[m
+[31m-[m
+[31m-# 创建必要的目录[m
+[31m-echo "📁 创建数据目录..."[m
+[31m-mkdir -p ./mysql/init[m
+[31m-[m
+[31m-# 构建并启动服务[m
+[31m-echo "🔨 构建并启动所有服务..."[m
+[31m-docker-compose up --build -d[m
+[31m-[m
+[31m-# 等待服务启动[m
+[31m-echo "⏳ 等待服务启动..."[m
+[31m-sleep 10[m
+[31m-[m
+[31m-# 检查服务状态[m
+[31m-echo "📊 检查服务状态..."[m
+[31m-docker-compose ps[m
+[31m-[m
+[31m-echo ""[m
+[31m-echo "✅ AgentChat 启动完成！"[m
+[31m-echo ""[m
+[31m-echo "🌐 访问地址："[m
+[31m-echo "  前端界面: http://localhost:8090"[m
+[31m-echo "  后端API:  http://localhost:7860"[m
+[31m-echo "  API文档:  http://localhost:7860/docs"[m
+[31m-echo ""[m
+[31m-echo "🔍 查看日志："[m
+[31m-echo "  所有服务: docker-compose logs -f"[m
+[31m-echo "  后端日志: docker-compose logs -f backend"[m
+[31m-echo "  前端日志: docker-compose logs -f frontend"[m
+[31m-echo ""[m
+[31m-echo "🛑 停止服务："[m
+[31m-echo "  docker-compose down"[m
+[31m-echo ""[m
+\ No newline at end of file[m
+[1mdiff --git a/docker/start_win.bat b/docker/start_win.bat[m
+[1mdeleted file mode 100644[m
+[1mindex 09fc0c5..0000000[m
+[1m--- a/docker/start_win.bat[m
+[1m+++ /dev/null[m
+[36m@@ -1,37 +0,0 @@[m
+[31m-@echo off[m
+[31m-setlocal[m
+[31m-[m
+[31m-echo Starting AgentChat Docker services...[m
+[31m-[m
+[31m-REM Create directories[m
+[31m-echo Creating directories...[m
+[31m-if not exist "mysql\init" mkdir mysql\init[m
+[31m-[m
+[31m-REM Start services[m
+[31m-echo Building and starting services...[m
+[31m-docker compose up --build -d[m
+[31m-[m
+[31m-REM Wait for startup[m
+[31m-echo Waiting for services to start...[m
+[31m-timeout /t 10 >nul[m
+[31m-[m
+[31m-REM Show status[m
+[31m-echo Checking service status...[m
+[31m-docker compose ps[m
+[31m-[m
+[31m-echo.[m
+[31m-echo AgentChat started successfully![m
+[31m-echo.[m
+[31m-echo Access URLs:[m
+[31m-echo Frontend: http://localhost:8090[m
+[31m-echo Backend API: http://localhost:7860[m
+[31m-echo API Docs: http://localhost:7860/docs[m
+[31m-echo.[m
+[31m-echo View logs:[m
+[31m-echo docker compose logs -f[m
+[31m-echo.[m
+[31m-echo Stop services:[m
+[31m-echo docker compose down[m
+[31m-echo.[m
+[31m-[m
+[31m-pause[m
+\ No newline at end of file[m
+[1mdiff --git a/docs/development/install_minio_win.md b/docs/development/install_minio_win.md[m
+[1mdeleted file mode 100644[m
+[1mindex b4340ff..0000000[m
+[1m--- a/docs/development/install_minio_win.md[m
+[1m+++ /dev/null[m
+[36m@@ -1,71 +0,0 @@[m
+[31m-## 一、安装minio[m
+[31m-[m
+[31m-例如现在D盘中创建 D:\minio[m
+[31m-[m
+[31m-在minio文件夹下打开power shell执行以下命令：[m
+[31m-[m
+[31m-```[m
+[31m-Invoke-WebRequest -Uri "https://dl.min.io/aistor/minio/release/windows-amd64/minio.exe" -OutFile "minio.exe"[m
+[31m-[m
+[31m-minio.exe --version[m
+[31m-```[m
+[31m-[m
+[31m-- 等待minio.exe下载完成[m
+[31m-[m
+[31m-25年之前的minio版本都是带有WebUI的可视化界面，但是最新的版本中WebUI可使用的功能非常少，所以我们先去申请一个人版本的License（单机部署免费的）[m
+[31m-[m
+[31m-申请链接：https://www.min.io/download/aistor-server?platform=windows[m
+[31m-[m
+[31m-<img width="1280" height="607" alt="image" src="https://github.com/user-attachments/assets/dd16ed10-3a76-458d-afb0-1a8b73c08908" />[m
+[31m-[m
+[31m-[m
+[31m-然后去邮件里面等收到License，下载本地的License之后放到D:\minio中[m
+[31m-<img width="898" height="471" alt="image" src="https://github.com/user-attachments/assets/c0f20c39-d857-42e3-ad51-7232e7d959ee" />[m
+[31m-[m
+[31m-因为启动minio需要指定一个存储文件夹，所以还需要在D:\minio下创建一个D:\minio\data文件夹[m
+[31m-[m
+[31m-启动命令是:[m
+[31m-```[m
+[31m-minio.exe server D:\minio\data --license D:\minio\minio.license[m
+[31m-```[m
+[31m-[m
+[31m-这是启动成功后的图片:[m
+[31m-<img width="1280" height="410" alt="image" src="https://github.com/user-attachments/assets/e9b442b4-fee4-42cb-9418-dc6f5434ec54" />[m
+[31m-[m
+[31m-然后默认的用户名和用户密码也是对应的access_key_id 和 access_key_scerct[m
+[31m-[m
+[31m-如果需要修改的话，可以执行:[m
+[31m-[m
+[31m-```[m
+[31m-setx MINIO_ROOT_USER=admin[m
+[31m-[m
+[31m-setx MINIO_ROOT_PASSWORD=admin123[m
+[31m-```[m
+[31m-[m
+[31m-修改完成之后也需要在agentchat中的config.yaml中需要修改对应的access 值[m
+[31m-[m
+[31m-## 二、修改Bucket权限[m
+[31m-[m
+[31m-### 新版本（2025.6后）[m
+[31m-现在算是将MiniO正常的部署到本机了，下面只需一步就大功告成，就是将agentchat的bucket权限全部放出来[m
+[31m-[m
+[31m-打开浏览器（需要保证minio 服务是启动中）[m
+[31m-```[m
+[31m-http://127.0.0.1:9001/console/buckets/agentchat/admin/prefix[m
+[31m-```[m
+[31m-[m
+[31m-新版本访问这个网页创建访问权限[m
+[31m-<img width="1280" height="575" alt="image" src="https://github.com/user-attachments/assets/e623dc86-d4b2-4d03-881e-8e7d852fabba" />[m
+[31m-[m
+[31m-`/代表的是当前bucket下的全部文件`[m
+[31m-[m
+[31m-readwrite相当于是开放读写权限[m
+[31m-[m
+[31m-### 老版本[m
+[31m-[m
+[31m-老版本创建访问权限（docker部署的是老版本的minio）[m
+[31m-<img width="1920" height="910" alt="170e76f735c75ea9a90807f7d60703f1" src="https://github.com/user-attachments/assets/4ec320f9-6cb6-465b-854c-456633a57b91" />[m
+[31m-[m
+[31m-[m
+[31m-## 总结[m
+[31m-这就是整体的一个Windows下部署minio的过程了，如果使用docker 进行启动服务的话，不需要担心license的问题，因为使用的是老版本，不需要license即可使用更多的功能[m
+[1mdiff --git a/docs/reference/agentchat.md b/docs/reference/agentchat.md[m
+[1mdeleted file mode 100644[m
+[1mindex 6b74cfb..0000000[m
+[1m--- a/docs/reference/agentchat.md[m
+[1m+++ /dev/null[m
+[36m@@ -1,1693 +0,0 @@[m
+[31m-# AgentChat 技术文档[m
+[31m-[m
+[31m-## 概述[m
+[31m-[m
+[31m-AgentChat 是一个功能强大的企业级智能对话系统，集成了先进的人工智能技术、多模态处理能力、知识库管理、工具集成等核心功能。本文档为客户提供完整的技术参考，涵盖系统架构、API接口、数据库设计、核心服务等各个方面。[m
+[31m-[m
+[31m-## 系统特色[m
+[31m-[m
+[31m-- **多智能体架构**: 支持多种专业化智能代理，满足不同业务场景[m
+[31m-- **企业级安全**: 完善的权限管理、数据隔离和安全执行环境[m
+[31m-- **高性能处理**: 异步架构、流式处理、智能缓存优化[m
+[31m-- **灵活扩展**: 插件化架构、MCP协议支持、丰富的API接口[m
+[31m-- **智能检索**: RAG技术、混合检索、语义理解[m
+[31m-- **多模态支持**: 文本、图像、文档等多种数据类型处理[m
+[31m-[m
+[31m-## 目录[m
+[31m-[m
+[31m-1. [API接口文档](#api接口文档)[m
+[31m-2. [智能代理架构](#智能代理架构)[m
+[31m-3. [核心服务系统](#核心服务系统)[m
+[31m-4. [数据库设计](#数据库设计)[m
+[31m-5. [部署与配置](#部署与配置)[m
+[31m-6. [最佳实践](#最佳实践)[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-# API接口文档[m
+[31m-[m
+[31m-## 接口概览[m
+[31m-[m
+[31m-AgentChat 提供完整的 RESTful API 接口，支持用户管理、智能体配置、对话处理、知识库管理等核心功能。所有接口遵循统一的响应格式，支持JWT认证和完善的错误处理机制。[m
+[31m-[m
+[31m-### 通用返回格式[m
+[31m-[m
+[31m-```json[m
+[31m-{[m
+[31m-  "code": 200,                    // 状态码，200表示成功，500表示失败[m
+[31m-  "message": "string",            // 返回消息[m
+[31m-  "data": "any"                   // 返回数据，根据具体接口而定[m
+[31m-}[m
+[31m-```[m
+[31m-[m
+[31m-### 认证机制[m
+[31m-[m
+[31m-除用户注册和登录接口外，所有接口都需要JWT Token认证。Token可通过请求头或Cookie传递。[m
+[31m-[m
+[31m-## 对话相关接口[m
+[31m-[m
+[31m-### 1. 智能对话接口[m
+[31m-- **接口 URL**: `/api/v1/chat`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 核心对话接口，支持流式响应和多模态输入[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "dialog_id": "string",        // 对话ID[m
+[31m-    "user_input": "string",       // 用户输入内容[m
+[31m-    "file_url": "string"          // 可选，文件URL[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**: Server-Sent Events (SSE) 流式响应[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "chunk": "string",            // 响应片段[m
+[31m-    "type": "response_chunk"      // 事件类型[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 文件上传接口[m
+[31m-- **接口 URL**: `/api/v1/upload`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 支持多种文件格式上传，自动处理和转换[m
+[31m-- **支持格式**: PDF、DOCX、TXT、JPG、PNG等[m
+[31m-- **请求参数**: [m
+[31m-  - `file`: 上传的文件[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "string",          // 文件访问URL[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```##[m
+[31m-# 3. 知识库检索接口[m
+[31m-- **接口 URL**: `/api/v1/knowledge/retrieval`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 智能知识检索，支持语义搜索和混合检索[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "query": "string",            // 用户问题[m
+[31m-    "knowledge_id": "string|array" // 知识库ID，可以是单个或数组[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": "string"              // 检索到的内容[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-## 用户管理接口[m
+[31m-[m
+[31m-### 1. 用户注册[m
+[31m-- **接口 URL**: `/api/v1/user/register`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 用户账户注册，支持邮箱验证[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_name": "string",        // 用户名[m
+[31m-    "user_email": "string",       // 可选，用户邮箱[m
+[31m-    "user_password": "string"     // 用户密码[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 用户登录[m
+[31m-- **接口 URL**: `/api/v1/user/login`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 用户身份验证，返回JWT Token[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_name": "string",        // 用户名[m
+[31m-    "user_password": "string"     // 用户密码[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": {[m
+[31m-      "user_id": "string",[m
+[31m-      "access_token": "string"[m
+[31m-    }[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 用户信息更新[m
+[31m-- **接口 URL**: `/api/v1/user/update`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 更新用户个人信息[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_avatar": "string",        // 用户头像URL[m
+[31m-    "user_description": "string"    // 用户描述[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 4. 用户头像选择[m
+[31m-- **接口 URL**: `/api/v1/user/icons`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **功能描述**: 获取系统预设头像列表[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": ["http://example.com/avatar1.jpg", "https://example.com/avatar2.jpg"][m
+[31m-  }[m
+[31m-  ```## 智能[m
+[31m-体管理接口[m
+[31m-[m
+[31m-### 1. 创建智能体[m
+[31m-- **接口 URL**: `/api/v1/agent`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 创建自定义智能体，支持工具绑定和知识库集成[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "name": "string",             // 智能体名称[m
+[31m-    "description": "string",      // 智能体描述[m
+[31m-    "logo_url": "string",         // 智能体图标URL[m
+[31m-    "tool_ids": ["string"],       // 工具ID列表[m
+[31m-    "llm_id": "string",           // 大模型ID[m
+[31m-    "mcp_ids": ["string"],        // MCP服务器ID列表[m
+[31m-    "system_prompt": "string",    // 系统提示词[m
+[31m-    "knowledge_ids": ["string"],  // 知识库ID列表[m
+[31m-    "use_embedding": boolean      // 是否使用嵌入[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 获取智能体列表[m
+[31m-- **接口 URL**: `/api/v1/agent`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **功能描述**: 获取用户可访问的智能体列表[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "agent_id": "string",[m
+[31m-        "name": "string",[m
+[31m-        "description": "string",[m
+[31m-        "logo_url": "string",[m
+[31m-        "tool_ids": ["string"],[m
+[31m-        "llm_id": "string",[m
+[31m-        "mcp_ids": ["string"],[m
+[31m-        "system_prompt": "string",[m
+[31m-        "knowledge_ids": ["string"],[m
+[31m-        "use_embedding": boolean[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 更新智能体[m
+[31m-- **接口 URL**: `/api/v1/agent`[m
+[31m-- **请求方法**: `PUT`[m
+[31m-- **功能描述**: 更新智能体配置信息[m
+[31m-- **请求参数**: 与创建接口相同，所有字段可选[m
+[31m-[m
+[31m-### 4. 删除智能体[m
+[31m-- **接口 URL**: `/api/v1/agent`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "agent_id": "string"          // 智能体ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 5. 搜索智能体[m
+[31m-- **接口 URL**: `/api/v1/agent/search`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 按名称搜索智能体[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "name": "string"              // 搜索的智能体名称[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-## 知识库管理接口[m
+[31m-[m
+[31m-### 1. 创建知识库[m
+[31m-- **接口 URL**: `/api/v1/knowledge/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 创建新的知识库[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "knowledge_name": "string",   // 知识库名称[m
+[31m-    "knowledge_desc": "string"    // 知识库描述[m
+[31m-  }[m
+[31m-  ```### 2. [m
+[31m-查询知识库[m
+[31m-- **接口 URL**: `/api/v1/knowledge/select`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **功能描述**: 获取用户的知识库列表[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "knowledge_id": "string",[m
+[31m-        "knowledge_name": "string",[m
+[31m-        "knowledge_desc": "string",[m
+[31m-        "create_time": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 知识库文件管理[m
+[31m-[m
+[31m-#### 创建知识库文件[m
+[31m-- **接口 URL**: `/api/v1/knowledge_file/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "knowledge_id": "string",     // 知识库ID[m
+[31m-    "file_url": "string"          // 文件上传后返回的URL[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-#### 查询知识库文件[m
+[31m-- **接口 URL**: `/api/v1/knowledge_file/select`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: `knowledge_id` (Query参数)[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "file_id": "string",[m
+[31m-        "file_name": "string",[m
+[31m-        "file_url": "string",[m
+[31m-        "upload_time": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-## 大模型管理接口[m
+[31m-[m
+[31m-### 1. 创建大模型配置[m
+[31m-- **接口 URL**: `/api/v1/llm/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 添加新的大模型配置[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "model": "string",            // 大模型名称[m
+[31m-    "api_key": "string",          // API密钥[m
+[31m-    "base_url": "string",         // 基础URL[m
+[31m-    "provider": "string",         // 提供商[m
+[31m-    "llm_type": "string"          // 模型类型 (LLM/Embedding/Rerank)[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 获取模型列表[m
+[31m-- **接口 URL**: `/api/v1/llm/all`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **功能描述**: 获取所有可用的大模型[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "llm_id": "string",[m
+[31m-        "model": "string",[m
+[31m-        "provider": "string",[m
+[31m-        "llm_type": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 获取模型类型[m
+[31m-- **接口 URL**: `/api/v1/llm/schema`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **功能描述**: 获取支持的模型类型[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": ["LLM", "Embedding", "Rerank"][m
+[31m-  }[m
+[31m-  ```#[m
+[31m-# 工具管理接口[m
+[31m-[m
+[31m-### 1. 创建工具[m
+[31m-- **接口 URL**: `/api/v1/tool/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 创建自定义工具[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "zh_name": "string",          // 工具中文名称[m
+[31m-    "en_name": "string",          // 工具英文名称[m
+[31m-    "description": "string",      // 工具描述[m
+[31m-    "logo_url": "string"          // 工具图标URL[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 获取工具列表[m
+[31m-- **接口 URL**: `/api/v1/tool/all`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **功能描述**: 获取所有可用工具[m
+[31m-[m
+[31m-### 3. 获取个人工具[m
+[31m-- **接口 URL**: `/api/v1/tool/own`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 获取用户创建的工具[m
+[31m-[m
+[31m-## MCP服务器管理接口[m
+[31m-[m
+[31m-### 1. 创建MCP服务器[m
+[31m-- **接口 URL**: `/api/v1/mcp_server`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 添加新的MCP服务器连接[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "server_name": "string",      // MCP Server名称[m
+[31m-    "url": "string",              // MCP Server URL[m
+[31m-    "type": "string",             // 连接方式（SSE、Websocket、Stdio）[m
+[31m-    "config": {}                  // 可选，MCP Server配置信息[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 获取MCP服务器列表[m
+[31m-- **接口 URL**: `/api/v1/mcp_server`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "server_id": "string",[m
+[31m-        "server_name": "string",[m
+[31m-        "url": "string",[m
+[31m-        "type": "string",[m
+[31m-        "config": {},[m
+[31m-        "tools": ["string"][m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 获取MCP工具信息[m
+[31m-- **接口 URL**: `/api/v1/mcp_tools`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **功能描述**: 获取指定MCP服务器的工具列表[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "server_id": "string"         // MCP Server ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-## 对话管理接口[m
+[31m-[m
+[31m-### 1. 获取对话列表[m
+[31m-- **接口 URL**: `/api/v1/dialog/list`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **功能描述**: 获取用户的对话会话列表[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "dialog_id": "string",[m
+[31m-        "name": "string",[m
+[31m-        "agent_id": "string",[m
+[31m-        "agent_type": "string",[m
+[31m-        "create_time": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 创建对话[m
+[31m-- **接口 URL**: `/api/v1/dialog`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "name": "string",             // 对话名称[m
+[31m-    "agent_id": "string",         // 智能体ID[m
+[31m-    "agent_type": "string"        // 智能体类型[m
+[31m-  }[m
+[31m-  ```#[m
+[31m-## 3. 获取对话历史[m
+[31m-- **接口 URL**: `/api/v1/history`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 获取指定对话的历史消息[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "dialog_id": "string"         // 对话ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "message_id": "string",[m
+[31m-        "role": "string",[m
+[31m-        "content": "string",[m
+[31m-        "timestamp": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-## 消息反馈接口[m
+[31m-[m
+[31m-### 1. 消息点赞[m
+[31m-- **接口 URL**: `/api/v1/message/like`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 对AI回复进行正面反馈[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_input": "string",       // 用户输入[m
+[31m-    "agent_output": "string"      // 智能体输出[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 消息踩[m
+[31m-- **接口 URL**: `/api/v1/message/down`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 对AI回复进行负面反馈[m
+[31m-[m
+[31m-## MCP用户配置接口[m
+[31m-[m
+[31m-### 1. 创建MCP用户配置[m
+[31m-- **接口 URL**: `/api/v1/mcp_user_config/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **功能描述**: 为用户创建MCP服务器的个性化配置[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "mcp_server_id": "string",    // MCP服务器ID[m
+[31m-    "config": {}                  // 配置信息[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 获取MCP用户配置[m
+[31m-- **接口 URL**: `/api/v1/mcp_user_config`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: `mcp_server_id` (Query参数)[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-# 智能代理架构[m
+[31m-[m
+[31m-## 架构概览[m
+[31m-[m
+[31m-AgentChat 采用多智能体架构设计，提供多种专业化的智能代理，每种代理都针对特定的使用场景进行了优化。系统基于 LangGraph 框架构建，支持复杂的状态管理和工作流编排。[m
+[31m-[m
+[31m-## 核心设计原则[m
+[31m-[m
+[31m-### 1. 模块化设计[m
+[31m-- **单一职责**: 每个代理专注于特定功能领域[m
+[31m-- **松耦合**: 代理间通过标准接口交互[m
+[31m-- **高内聚**: 相关功能集中在同一代理中[m
+[31m-[m
+[31m-### 2. 异步优先[m
+[31m-- **非阻塞处理**: 所有I/O操作采用异步方式[m
+[31m-- **并发支持**: 支持高并发的请求处理[m
+[31m-- **资源优化**: 最大化系统资源利用率[m
+[31m-[m
+[31m-### 3. 流式处理[m
+[31m-- **实时响应**: 提供实时的用户反馈[m
+[31m-- **内存效率**: 避免大量数据的内存占用[m
+[31m-- **用户体验**: 改善长时间任务的交互体验[m
+[31m-[m
+[31m-## 智能代理类型[m
+[31m-[m
+[31m-### 1. ReactAgent - 推理行动代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-ReactAgent 基于 ReAct (Reasoning and Acting) 范式，实现思考-行动-观察的智能循环，是系统中最通用的智能代理。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **推理-行动循环**: 智能的思考和执行流程[m
+[31m-- **工具集成**: 无缝集成各种外部工具和服务[m
+[31m-- **流式输出**: 支持实时流式响应[m
+[31m-- **状态管理**: 基于 LangGraph 的状态机管理[m
+[31m-[m
+[31m-**技术架构**[m
+[31m-```python[m
+[31m-class ReactAgent:[m
+[31m-    def __init__(self, model: BaseChatModel, system_prompt: str, tools: List[BaseTool]):[m
+[31m-        self.model = model[m
+[31m-        self.system_prompt = system_prompt[m
+[31m-        self.tools = tools[m
+[31m-        self.graph = self._build_graph()[m
+[31m-```[m
+[31m-[m
+[31m-**工作流程**[m
+[31m-1. **输入分析**: 分析用户输入，理解意图和需求[m
+[31m-2. **工具选择**: 基于需求智能选择合适的工具[m
+[31m-3. **工具执行**: 执行选定工具并获取结果[m
+[31m-4. **结果整合**: 将工具结果整合到对话上下文[m
+[31m-5. **响应生成**: 基于完整上下文生成最终响应[m
+[31m-[m
+[31m-**适用场景**[m
+[31m-- 通用智能对话[m
+[31m-- 多工具协作任务[m
+[31m-- 实时交互需求[m
+[31m-- 复杂问题解答##[m
+[31m-# 2. CodeActAgent - 代码执行代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-CodeActAgent 专门设计用于代码生成、执行和调试，提供安全的代码执行环境和智能的代码分析能力。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **代码生成**: 基于自然语言生成高质量Python代码[m
+[31m-- **安全执行**: 在Pyodide沙箱环境中安全执行代码[m
+[31m-- **上下文保持**: 维护代码执行的完整上下文状态[m
+[31m-- **错误处理**: 智能的错误检测和修复建议[m
+[31m-- **工具集成**: 支持在代码中调用外部工具和API[m
+[31m-[m
+[31m-**技术实现**[m
+[31m-```python[m
+[31m-class CodeActAgent:[m
+[31m-    def __init__(self, sandbox: PyodideSandbox):[m
+[31m-        self.sandbox = sandbox[m
+[31m-        self.context = {}  # 执行上下文[m
+[31m-        [m
+[31m-    async def execute_code(self, code: str) -> ExecutionResult:[m
+[31m-        # 在沙箱中安全执行代码[m
+[31m-        response = await self.sandbox.execute(code=code)[m
+[31m-        return response[m
+[31m-```[m
+[31m-[m
+[31m-**执行流程**[m
+[31m-1. **代码提取**: 从模型响应中提取代码块[m
+[31m-2. **语法检查**: 验证代码语法正确性[m
+[31m-3. **安全检查**: 检查潜在的安全风险[m
+[31m-4. **环境准备**: 准备执行环境和依赖[m
+[31m-5. **代码执行**: 在沙箱中执行代码[m
+[31m-6. **结果处理**: 处理执行结果和异常[m
+[31m-[m
+[31m-**适用场景**[m
+[31m-- 数据分析和可视化[m
+[31m-- 算法实现和验证[m
+[31m-- 自动化脚本生成[m
+[31m-- 教育和培训场景[m
+[31m-[m
+[31m-### 3. PlanExecuteAgent - 规划执行代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-PlanExecuteAgent 采用规划-执行范式，先制定详细的执行计划，再逐步执行，特别适用于复杂的多步骤任务。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **战略规划**: 分析复杂任务并制定执行计划[m
+[31m-- **工具编排**: 智能选择和编排工具调用序列[m
+[31m-- **MCP集成**: 深度集成模型上下文协议工具[m
+[31m-- **错误恢复**: 自动错误检测和恢复机制[m
+[31m-- **进度跟踪**: 实时跟踪任务执行进度[m
+[31m-[m
+[31m-**规划阶段**[m
+[31m-```python[m
+[31m-async def _plan_agent_actions(self, messages: List[BaseMessage]):[m
+[31m-    # 使用结构化响应代理生成执行计划[m
+[31m-    structured_response_agent = StructuredResponseAgent(response_format=PlanToolFlow)[m
+[31m-    response = structured_response_agent.get_structured_response(call_messages)[m
+[31m-    return json.loads(response.content)[m
+[31m-```[m
+[31m-[m
+[31m-**执行阶段**[m
+[31m-```python[m
+[31m-async def _execute_agent_actions(self, agent_plans):[m
+[31m-    # 根据计划逐步执行工具调用[m
+[31m-    for step, plan in agent_plans.items():[m
+[31m-        response = await tool_call_model.ainvoke(call_tool_messages)[m
+[31m-        tool_messages = await self._execute_tool(response)[m
+[31m-```[m
+[31m-[m
+[31m-**适用场景**[m
+[31m-- 复杂业务流程自动化[m
+[31m-- 多系统集成任务[m
+[31m-- 长时间运行的批处理任务[m
+[31m-- 需要精确控制的工作流[m
+[31m-[m
+[31m-### 4. MCPAgent - 模型上下文协议代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-MCPAgent 专门用于集成支持模型上下文协议（MCP）的外部服务和工具，提供标准化的工具集成能力。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **MCP协议支持**: 完整支持MCP协议规范[m
+[31m-- **动态工具加载**: 运行时动态发现和加载工具[m
+[31m-- **用户配置**: 支持用户个性化配置和认证[m
+[31m-- **中间件系统**: 可扩展的请求处理中间件[m
+[31m-- **事件流**: 实时事件通知和状态更新[m
+[31m-[m
+[31m-**配置管理**[m
+[31m-```python[m
+[31m-class MCPConfig(BaseModel):[m
+[31m-    url: str                    # MCP服务器URL[m
+[31m-    type: str = "sse"          # 连接类型[m
+[31m-    tools: List[str] = []      # 可用工具列表[m
+[31m-    server_name: str           # 服务器名称[m
+[31m-    mcp_server_id: str         # 服务器ID[m
+[31m-```[m
+[31m-[m
+[31m-**中间件架构**[m
+[31m-```python[m
+[31m-@wrap_tool_call[m
+[31m-async def add_tool_call_args(request: ToolCallRequest, handler):[m
+[31m-    # 添加用户配置到工具调用参数[m
+[31m-    mcp_config = await MCPUserConfigService.get_mcp_user_config([m
+[31m-        self.user_id, self.mcp_config.mcp_server_id[m
+[31m-    )[m
+[31m-    request.tool_call["args"].update(mcp_config)[m
+[31m-    return await handler(request)[m
+[31m-```[m
+[31m-[m
+[31m-**适用场景**[m
+[31m-- 第三方服务集成[m
+[31m-- 企业内部系统连接[m
+[31m-- API服务封装[m
+[31m-- 标准化工具管理[m
+[31m-[m
+[31m-### 5. StructuredResponseAgent - 结构化响应代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-StructuredResponseAgent 专门用于生成结构化的响应，确保输出符合预定义的数据格式和业务规则。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **格式约束**: 强制输出符合指定的Pydantic模型[m
+[31m-- **类型安全**: 确保响应数据的类型安全性[m
+[31m-- **验证机制**: 自动验证输出格式的正确性[m
+[31m-- **模板支持**: 支持响应模板和格式化规则[m
+[31m-[m
+[31m-**使用示例**[m
+[31m-```python[m
+[31m-class ResponseFormat(BaseModel):[m
+[31m-    answer: str[m
+[31m-    confidence: float[m
+[31m-    sources: List[str][m
+[31m-[m
+[31m-agent = StructuredResponseAgent(response_format=ResponseFormat)[m
+[31m-response = agent.get_structured_response(messages)[m
+[31m-```[m
+[31m-[m
+[31m-**适用场景**[m
+[31m-- API响应格式化[m
+[31m-- 数据提取和转换[m
+[31m-- 报告生成[m
+[31m-- 结构化数据处理## 模型管理[m
+[31m-系统[m
+[31m-[m
+[31m-### ModelManager - 统一模型管理器[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-ModelManager 提供统一的模型管理接口，支持多种类型的语言模型和专用模型，简化模型配置和使用。[m
+[31m-[m
+[31m-**支持的模型类型**[m
+[31m-- **对话模型**: 用于一般对话和文本生成[m
+[31m-- **工具调用模型**: 专门用于工具调用和函数执行[m
+[31m-- **推理模型**: 支持复杂推理任务[m
+[31m-- **嵌入模型**: 用于文本向量化[m
+[31m-- **视觉语言模型**: 支持图像理解和描述[m
+[31m-[m
+[31m-**核心接口**[m
+[31m-```python[m
+[31m-class ModelManager:[m
+[31m-    @classmethod[m
+[31m-    def get_conversation_model(cls) -> BaseChatModel:[m
+[31m-        # 获取对话模型[m
+[31m-        [m
+[31m-    @classmethod[m
+[31m-    def get_tool_invocation_model(cls) -> BaseChatModel:[m
+[31m-        # 获取工具调用模型[m
+[31m-        [m
+[31m-    @classmethod[m
+[31m-    def get_reasoning_model(cls) -> ReasoningModel:[m
+[31m-        # 获取推理模型[m
+[31m-        [m
+[31m-    @classmethod[m
+[31m-    def get_embedding_model(cls) -> EmbeddingModel:[m
+[31m-        # 获取嵌入模型[m
+[31m-```[m
+[31m-[m
+[31m-### 专用模型实现[m
+[31m-[m
+[31m-#### EmbeddingModel - 嵌入模型[m
+[31m-**功能特性**[m
+[31m-- **批量处理**: 高效的批量文本处理[m
+[31m-- **并发控制**: 智能并发控制和限流[m
+[31m-- **缓存优化**: 智能缓存机制减少重复计算[m
+[31m-[m
+[31m-```python[m
+[31m-class EmbeddingModel:[m
+[31m-    async def embed_async(self, query: Union[str, List[str]]) -> Union[List[float], List[List[float]]]:[m
+[31m-        # 异步嵌入文本（支持批量）[m
+[31m-        if isinstance(query, str):[m
+[31m-            return await self._embed_single(query)[m
+[31m-        else:[m
+[31m-            return await self._embed_batch(query)[m
+[31m-```[m
+[31m-[m
+[31m-#### ReasoningModel - 推理模型[m
+[31m-**功能特性**[m
+[31m-- **流式推理**: 支持流式推理输出[m
+[31m-- **消息转换**: 自动转换LangChain消息格式[m
+[31m-- **工具调用**: 支持工具调用和函数执行[m
+[31m-[m
+[31m-#### ChatModelWithTokenUsage - 带使用统计的聊天模型[m
+[31m-**功能特性**[m
+[31m-- **Token统计**: 自动记录Token使用情况[m
+[31m-- **用户追踪**: 按用户和代理分类统计[m
+[31m-- **成本控制**: 支持使用量限制和成本控制[m
+[31m-[m
+[31m-## 回调处理机制[m
+[31m-[m
+[31m-### UsageMetadataCallbackHandler - 使用统计回调[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-专门用于追踪和记录模型使用情况的回调处理器，提供详细的使用统计和成本分析。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **自动统计**: 自动收集Token使用统计[m
+[31m-- **多模型支持**: 支持多个模型的并发统计[m
+[31m-- **线程安全**: 使用锁机制确保线程安全[m
+[31m-- **上下文感知**: 自动获取用户和代理上下文[m
+[31m-[m
+[31m-**统计机制**[m
+[31m-```python[m
+[31m-class UsageMetadataCallbackHandler(BaseCallbackHandler):[m
+[31m-    def on_llm_end(self, response: LLMResult, **kwargs):[m
+[31m-        # 收集Token使用统计[m
+[31m-        with self._lock:[m
+[31m-            self.usage_metadata[model_name] = add_usage([m
+[31m-                self.usage_metadata[model_name], usage_metadata[m
+[31m-            )[m
+[31m-            self.record_token_usage(model_name, usage_metadata)[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-# 核心服务系统[m
+[31m-[m
+[31m-## RAG处理器 (RagHandler)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-RAG（Retrieval-Augmented Generation）处理器是系统的核心组件，提供智能检索和生成增强功能，支持多种检索策略和优化算法。[m
+[31m-[m
+[31m-**主要特性**[m
+[31m-- **查询重写**: 自动优化用户查询以提高检索准确性[m
+[31m-- **混合检索**: 结合Elasticsearch和Milvus向量数据库[m
+[31m-- **文档重排序**: 使用先进的重排序算法优化结果[m
+[31m-- **智能过滤**: 基于相关性分数和配置参数过滤[m
+[31m-[m
+[31m-**核心方法**[m
+[31m-```python[m
+[31m-# 查询重写 - 提高检索效果[m
+[31m-async def query_rewrite(cls, query) -> List[str]:[m
+[31m-    # 返回重写后的查询列表[m
+[31m-[m
+[31m-# 混合检索 - 多维度检索[m
+[31m-async def mix_retrival_documents(cls, query_list, knowledges_id, search_field):[m
+[31m-    # 结合多种检索方式，返回最相关的文档[m
+[31m-[m
+[31m-# RAG查询摘要 - 完整流程[m
+[31m-async def rag_query_summary(cls, query, knowledges_id, min_score, top_k, needs_query_rewrite):[m
+[31m-    # 从查询到生成最终答案的完整RAG流程[m
+[31m-```[m
+[31m-[m
+[31m-**检索优化策略**[m
+[31m-1. **查询扩展**: 基于同义词和相关概念扩展查询[m
+[31m-2. **多路召回**: 使用不同策略并行检索[m
+[31m-3. **结果融合**: 智能融合不同检索源的结果[m
+[31m-4. **相关性排序**: 基于多种相关性信号重新排序[m
+[31m-[m
+[31m-## 智能代理服务[m
+[31m-[m
+[31m-### AutoBuild - 自动构建代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-AutoBuild 服务提供智能代理的自动化构建功能，通过对话式交互帮助用户创建定制化的智能代理。[m
+[31m-[m
+[31m-**核心组件**[m
+[31m-[m
+[31m-#### AutoBuildManager - 构建管理器[m
+[31m-- **连接管理**: 管理WebSocket连接和客户端会话[m
+[31m-- **生命周期控制**: 处理代理构建的完整生命周期[m
+[31m-- **异常处理**: 提供完善的错误处理和恢复机制[m
+[31m-[m
+[31m-#### AutoBuildClient - 构建客户端[m
+[31m-- **交互式构建**: 通过LangGraph实现的多步骤构建流程[m
+[31m-- **智能参数提取**: 自动从用户输入中提取代理配置参数[m
+[31m-- **工具绑定**: 智能选择和绑定合适的工具集[m
+[31m-[m
+[31m-**构建流程**[m
+[31m-1. **引导阶段**: 发送欢迎信息，引导用户开始构建[m
+[31m-2. **名称收集**: 收集并验证代理名称的唯一性[m
+[31m-3. **描述收集**: 收集代理功能描述和需求[m
+[31m-4. **参数提取**: 使用LLM智能提取结构化参数[m
+[31m-5. **工具选择**: 基于描述自动选择合适的工具[m
+[31m-6. **代理创建**: 完成代理的创建和配置[m
+[31m-[m
+[31m-### LingSeek - 高级智能代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-LingSeek 是一个高级智能代理，专门设计用于复杂任务的分解和执行，支持多种推理模式和工具集成。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-- **COT思维链**: 使用思维链方法提高推理准确性[m
+[31m-- **任务图构建**: 自动构建任务依赖关系图[m
+[31m-- **增量执行**: 支持任务的增量执行和结果累积[m
+[31m-- **反馈优化**: 基于执行结果优化后续任务[m
+[31m-[m
+[31m-**技术实现**[m
+[31m-```python[m
+[31m-# 引导提示生成[m
+[31m-async def generate_guide_prompt(self, lingseek_info, feedback=False):[m
+[31m-    # 生成智能引导提示，支持反馈优化[m
+[31m-[m
+[31m-# 任务分解与执行[m
+[31m-async def generate_tasks(self, lingseek_task):[m
+[31m-    # 将复杂任务分解为可执行的步骤[m
+[31m-[m
+[31m-async def submit_lingseek_task(self, lingseek_task):[m
+[31m-    # 执行任务并返回结果[m
+[31m-```### Dee[m
+[31m-pSearch - 深度搜索服务[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-DeepSearch 提供高级的网络搜索和研究功能，使用LangGraph实现智能搜索流程，支持多轮搜索和结果优化。[m
+[31m-[m
+[31m-**核心组件**[m
+[31m-- **OverallState**: 管理整体搜索状态[m
+[31m-- **QueryGenerationState**: 查询生成状态[m
+[31m-- **ReflectionState**: 反思和评估状态[m
+[31m-- **WebSearchState**: 网络搜索状态[m
+[31m-[m
+[31m-**搜索流程**[m
+[31m-1. **查询生成**: 基于用户问题生成优化的搜索查询[m
+[31m-2. **并行搜索**: 使用Tavily API进行并行网络搜索[m
+[31m-3. **结果反思**: 分析搜索结果，识别知识缺口[m
+[31m-4. **迭代优化**: 根据反思结果进行后续搜索[m
+[31m-5. **答案生成**: 综合所有信息生成最终答案[m
+[31m-[m
+[31m-**技术特点**[m
+[31m-- 集成Tavily搜索API[m
+[31m-- 支持中文搜索优化[m
+[31m-- 智能结果去重和排序[m
+[31m-- 可配置的搜索参数[m
+[31m-[m
+[31m-## 知识检索服务[m
+[31m-[m
+[31m-### 混合检索 (MixRetrieval)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供多种检索方式的统一接口，支持Elasticsearch和Milvus向量数据库的混合检索。[m
+[31m-[m
+[31m-**检索策略**[m
+[31m-- **语义检索**: 基于向量相似度的语义理解检索[m
+[31m-- **关键词检索**: 基于Elasticsearch的全文检索[m
+[31m-- **混合检索**: 结合两种方式的优势，提供最佳检索效果[m
+[31m-[m
+[31m-**核心方法**[m
+[31m-```python[m
+[31m-# Milvus向量检索[m
+[31m-async def retrival_milvus_documents(cls, query, knowledges_id, search_field):[m
+[31m-    # 基于向量相似度检索[m
+[31m-[m
+[31m-# Elasticsearch全文检索[m
+[31m-async def retrival_es_documents(cls, query, knowledges_id, search_field):[m
+[31m-    # 基于关键词的全文检索[m
+[31m-[m
+[31m-# 混合检索[m
+[31m-async def mix_retrival_documents(cls, query_list, knowledges_id, search_field):[m
+[31m-    # 结合多种检索方式[m
+[31m-```[m
+[31m-[m
+[31m-### 嵌入服务 (Embedding)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供高性能的文本向量化服务，支持批量处理和并发优化。[m
+[31m-[m
+[31m-**特性**[m
+[31m-- **批量处理**: 支持单个文本和批量文本处理[m
+[31m-- **并发控制**: 使用信号量控制并发数量[m
+[31m-- **自动分批**: 大批量数据自动分批处理[m
+[31m-- **异步处理**: 完全异步的处理流程[m
+[31m-[m
+[31m-**性能优化**[m
+[31m-```python[m
+[31m-# 批量处理优化[m
+[31m-batches = [query[i:i + 10] for i in range(0, len(query), 10)][m
+[31m-tasks = [process_batch(batch) for batch in batches][m
+[31m-results = await asyncio.gather(*tasks)[m
+[31m-```[m
+[31m-[m
+[31m-## 内存管理服务[m
+[31m-[m
+[31m-### AsyncMemory - 异步内存管理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-AsyncMemory 提供高性能的异步内存管理功能，支持多种内存类型和智能管理策略。[m
+[31m-[m
+[31m-**内存类型**[m
+[31m-- **语义内存 (SEMANTIC)**: 存储事实和知识[m
+[31m-- **情节内存 (EPISODIC)**: 存储对话历史和事件[m
+[31m-- **程序内存 (PROCEDURAL)**: 存储操作步骤和流程[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-```python[m
+[31m-# 智能内存添加[m
+[31m-async def add(self, messages, user_id=None, agent_id=None, run_id=None, [m
+[31m-              metadata=None, infer=True, memory_type=None):[m
+[31m-    # 支持自动推理和分类[m
+[31m-[m
+[31m-# 语义检索[m
+[31m-async def search(self, query, user_id=None, agent_id=None, run_id=None, [m
+[31m-                 limit=100, filters=None, threshold=None):[m
+[31m-    # 基于语义相似度的内存检索[m
+[31m-[m
+[31m-# 内存管理[m
+[31m-async def update(self, memory_id, data)  # 更新内存[m
+[31m-async def delete(self, memory_id)        # 删除内存[m
+[31m-async def get_all(self, **filters)       # 获取所有内存[m
+[31m-```[m
+[31m-[m
+[31m-**智能特性**[m
+[31m-- **自动推理**: 智能提取和分类内存内容[m
+[31m-- **去重机制**: 自动检测和处理重复内存[m
+[31m-- **版本控制**: 支持内存历史版本管理[m
+[31m-- **多维过滤**: 支持用户、代理、会话等多维度过滤[m
+[31m-[m
+[31m-## 工具集成服务[m
+[31m-[m
+[31m-### MCP管理器 (MCPManager)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-MCP (Model Context Protocol) 管理器提供外部工具和服务的标准化集成能力。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-- **多服务器支持**: 同时管理多个MCP服务器[m
+[31m-- **工具发现**: 自动发现和注册可用工具[m
+[31m-- **并发调用**: 支持工具的并发执行[m
+[31m-- **错误处理**: 完善的错误处理和恢复机制[m
+[31m-[m
+[31m-**使用流程**[m
+[31m-1. **配置服务器**: 配置MCP服务器连接信息[m
+[31m-2. **获取工具**: 自动发现可用工具列表[m
+[31m-3. **调用工具**: 异步并发调用工具[m
+[31m-4. **结果处理**: 统一处理工具执行结果[m
+[31m-[m
+[31m-### 沙箱服务 (Sandbox)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供安全的代码执行环境，基于Pyodide实现浏览器端Python执行。[m
+[31m-[m
+[31m-**安全特性**[m
+[31m-- **完全隔离**: 代码在独立的沙箱环境中执行[m
+[31m-- **权限控制**: 严格的文件系统和网络访问控制[m
+[31m-- **资源限制**: 内存和CPU使用限制[m
+[31m-- **实时监控**: 执行过程的实时监控和控制[m
+[31m-[m
+[31m-## 文档处理服务[m
+[31m-[m
+[31m-### 文档转换服务 (TransformPaper)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供多种文档格式的智能转换和处理功能。[m
+[31m-[m
+[31m-**支持格式**[m
+[31m-- **PDF处理**: 文本提取、图像识别、表格解析[m
+[31m-- **DOCX处理**: 格式保持、样式转换、内容提取[m
+[31m-- **图像处理**: OCR识别、图像描述生成[m
+[31m-[m
+[31m-**处理流程**[m
+[31m-1. **格式识别**: 自动识别文档格式和结构[m
+[31m-2. **内容提取**: 提取文本、图像、表格等内容[m
+[31m-3. **格式转换**: 转换为标准化格式[m
+[31m-4. **质量优化**: 内容清洗和格式优化[m
+[31m-[m
+[31m-### Markdown重写服务[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-智能Markdown文档处理和优化服务，支持图像描述生成和链接优化。[m
+[31m-[m
+[31m-**主要功能**[m
+[31m-- **图片描述生成**: 使用视觉语言模型自动生成图片描述[m
+[31m-- **链接优化**: 自动优化图片链接和引用[m
+[31m-- **批量处理**: 支持批量文档处理[m
+[31m-- **异步优化**: 高效的异步处理流程[m
+[31m-[m
+[31m-## 云存储服务[m
+[31m-[m
+[31m-### 阿里云OSS客户端[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供完整的阿里云对象存储服务集成，支持文件上传、下载、管理等功能。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-```python[m
+[31m-# 文件操作[m
+[31m-def upload_file(self, object_name, data)           # 上传文件数据[m
+[31m-def upload_local_file(self, object_name, local_file) # 上传本地文件[m
+[31m-def download_file(self, object_name, local_file)   # 下载文件[m
+[31m-[m
+[31m-# 链接管理[m
+[31m-def sign_url_for_get(self, object_name, expiration=3600):[m
+[31m-    # 生成带签名的访问链接[m
+[31m-[m
+[31m-# 文件管理[m
+[31m-def list_files_in_folder(self, folder_path):[m
+[31m-    # 列出指定文件夹下的所有文件[m
+[31m-```[m
+[31m-[m
+[31m-**特性**[m
+[31m-- **自动配置**: 基于配置文件自动初始化[m
+[31m-- **安全访问**: 支持签名URL和权限控制[m
+[31m-- **批量操作**: 支持批量文件操作[m
+[31m-- **错误处理**: 完善的异常处理机制[m
+[31m-[m
+[31m-## 缓存服务[m
+[31m-[m
+[31m-### Redis客户端[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供高性能的Redis缓存服务集成，支持多种数据结构和操作。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-```python[m
+[31m-# 基础操作[m
+[31m-def set(self, key, value, expiration=3600)    # 设置键值对[m
+[31m-def get(self, key)                            # 获取值[m
+[31m-def delete(self, key)                         # 删除键[m
+[31m-[m
+[31m-# 哈希操作[m
+[31m-def hset(self, name, key, value, expiration)  # 设置哈希[m
+[31m-def hget(self, name, key)                     # 获取哈希值[m
+[31m-def hgetall(self, name)                       # 获取所有哈希值[m
+[31m-[m
+[31m-# 高级功能[m
+[31m-def setNx(self, key, value, expiration=3600)  # 仅在不存在时设置[m
+[31m-def incr(self, key, expiration=3600)          # 递增计数[m
+[31m-```[m
+[31m-[m
+[31m-**特性**[m
+[31m-- **连接池管理**: 高效的连接池管理[m
+[31m-- **序列化支持**: 自动pickle序列化[m
+[31m-- **过期控制**: 灵活的过期时间设置[m
+[31m-- **集群支持**: 支持Redis集群模式-[m
+[31m---[m
+[31m-[m
+[31m-# 数据库设计[m
+[31m-[m
+[31m-## 数据库架构概览[m
+[31m-[m
+[31m-AgentChat 系统采用 MySQL 数据库，使用 SQLModel 作为 ORM 框架。数据库设计遵循规范化原则，支持用户管理、智能体配置、对话管理、知识库管理等核心功能。[m
+[31m-[m
+[31m-**数据库配置**[m
+[31m-- **数据库名称**: `agentchat`[m
+[31m-- **默认用户**: `agentchat_user`[m
+[31m-- **连接地址**: `mysql://agentchat_user:123456@mysql:3306/agentchat`[m
+[31m-[m
+[31m-## 核心表结构[m
+[31m-[m
+[31m-### 用户管理表结构[m
+[31m-[m
+[31m-#### 用户表 (user)[m
+[31m-存储系统用户的基本信息和认证数据。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| user_id | VARCHAR | PRIMARY KEY | 用户唯一标识 (UUID) |[m
+[31m-| user_name | VARCHAR | UNIQUE, INDEX | 用户名 |[m
+[31m-| user_email | VARCHAR | | 用户邮箱 |[m
+[31m-| user_avatar | VARCHAR | | 用户头像URL |[m
+[31m-| user_description | VARCHAR | DEFAULT: "该用户很懒，没有留下一片云彩" | 用户描述 |[m
+[31m-| user_password | VARCHAR | | 加密后的用户密码 |[m
+[31m-| delete | BOOLEAN | DEFAULT: FALSE | 软删除标记 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-**特殊用户类型**:[m
+[31m-- SystemUser = '0' (系统用户)[m
+[31m-- AdminUser = '1' (管理员用户)[m
+[31m-[m
+[31m-#### 角色表 (role)[m
+[31m-定义系统中的用户角色和权限。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | INT | PRIMARY KEY, AUTO_INCREMENT | 角色ID |[m
+[31m-| role_name | VARCHAR | UNIQUE | 角色名称 |[m
+[31m-| remark | VARCHAR | | 角色备注 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-**预定义角色**:[m
+[31m-- SystemRole = '0' (系统管理员)[m
+[31m-- AdminRole = '1' (超级管理员)  [m
+[31m-- DefaultRole = '2' (普通用户)[m
+[31m-[m
+[31m-#### 用户角色关联表 (user_role)[m
+[31m-管理用户与角色的多对多关系。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 关联记录ID |[m
+[31m-| user_id | VARCHAR | INDEX | 用户ID |[m
+[31m-| role_id | VARCHAR | INDEX | 角色ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 智能体管理表结构[m
+[31m-[m
+[31m-#### 智能体表 (agent)[m
+[31m-存储智能体的完整配置信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 智能体ID (UUID) |[m
+[31m-| name | VARCHAR | | 智能体名称 |[m
+[31m-| description | VARCHAR | | 智能体描述 |[m
+[31m-| logo_url | VARCHAR | | 智能体Logo URL |[m
+[31m-| user_id | VARCHAR | INDEX | 创建用户ID |[m
+[31m-| is_custom | BOOLEAN | DEFAULT: TRUE | 是否为用户自定义 |[m
+[31m-| system_prompt | TEXT | | 系统提示词 |[m
+[31m-| llm_id | VARCHAR | | 绑定的LLM模型ID |[m
+[31m-| enable_memory | BOOLEAN | DEFAULT: TRUE | 是否开启记忆功能 |[m
+[31m-| mcp_ids | JSON | | 绑定的MCP Server ID列表 |[m
+[31m-| tool_ids | JSON | | 绑定的工具ID列表 |[m
+[31m-| knowledge_ids | JSON | | 绑定的知识库ID列表 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### MCP智能体表 (mcp_agent)[m
+[31m-专门用于MCP (Model Context Protocol) 智能体的配置。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| mcp_agent_id | VARCHAR | PRIMARY KEY | MCP智能体ID |[m
+[31m-| mcp_server_id | JSON | | 绑定的MCP Server ID |[m
+[31m-| name | VARCHAR | | MCP智能体名称 |[m
+[31m-| description | VARCHAR | | 描述信息 |[m
+[31m-| logo_url | VARCHAR | DEFAULT: 'img/mcp_openai/mcp_agent.png' | Logo URL |[m
+[31m-| user_id | VARCHAR | INDEX | 创建用户ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 对话管理表结构[m
+[31m-[m
+[31m-#### 对话表 (dialog)[m
+[31m-存储用户与智能体的对话会话信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| dialog_id | VARCHAR | PRIMARY KEY | 对话ID (UUID) |[m
+[31m-| name | VARCHAR | | 对话名称 |[m
+[31m-| agent_id | VARCHAR | | 绑定的智能体ID |[m
+[31m-| agent_type | VARCHAR | DEFAULT: "Agent" | 智能体类型 (Agent/MCPAgent) |[m
+[31m-| user_id | VARCHAR | | 用户ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 历史消息表 (history)[m
+[31m-存储对话中的具体消息内容和元数据。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 消息ID (UUID) |[m
+[31m-| content | TEXT | | 消息内容 |[m
+[31m-| dialog_id | VARCHAR | | 所属对话ID |[m
+[31m-| role | VARCHAR | | 消息角色 (assistant/system/user) |[m
+[31m-| events | JSON | | AI回复事件信息 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 工作台会话表 (workspace_session)[m
+[31m-管理工作台的会话信息和上下文。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| session_id | VARCHAR | PRIMARY KEY | 会话ID (UUID) |[m
+[31m-| title | VARCHAR | | 会话标题 |[m
+[31m-| agent | VARCHAR | | 使用的智能体 |[m
+[31m-| user_id | VARCHAR | | 用户ID |[m
+[31m-| contexts | JSON | | 结构化对话上下文 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 知识库管理表结构[m
+[31m-[m
+[31m-#### 知识库表 (knowledge)[m
+[31m-存储知识库的基本信息和配置。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 知识库ID (格式: t_xxxxxxxxxxxxxxxx) |[m
+[31m-| name | VARCHAR(128) | UNIQUE, INDEX | 知识库名称 |[m
+[31m-| description | VARCHAR(1024) | | 知识库描述 |[m
+[31m-| user_id | VARCHAR(128) | INDEX | 创建用户ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 知识库文件表 (knowledge_file)[m
+[31m-存储知识库中的文件信息和处理状态。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 文件ID (UUID) |[m
+[31m-| file_name | VARCHAR | INDEX | 文件名称 |[m
+[31m-| knowledge_id | VARCHAR | INDEX | 所属知识库ID |[m
+[31m-| status | VARCHAR | DEFAULT: "success" | 文件解析状态 (fail/process/success) |[m
+[31m-| user_id | VARCHAR | INDEX | 用户ID |[m
+[31m-| oss_url | VARCHAR | | OSS存储路径 |[m
+[31m-| file_size | INT | DEFAULT: 0 | 文件大小(字节) |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 模型管理表结构[m
+[31m-[m
+[31m-#### 大语言模型表 (llm)[m
+[31m-存储大语言模型的配置信息和连接参数。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| llm_id | VARCHAR | PRIMARY KEY | 模型ID (UUID) |[m
+[31m-| llm_type | VARCHAR | DEFAULT: 'LLM' | 模型类型 (LLM/Embedding/Rerank) |[m
+[31m-| model | VARCHAR | | 模型名称 |[m
+[31m-| base_url | VARCHAR | | 模型API地址 |[m
+[31m-| api_key | VARCHAR | | API密钥 |[m
+[31m-| provider | VARCHAR | | 模型提供商 |[m
+[31m-| user_id | VARCHAR | | 创建用户ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 工具管理表结构[m
+[31m-[m
+[31m-#### 工具表 (tool)[m
+[31m-存储系统中可用的工具信息和配置。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| tool_id | VARCHAR | PRIMARY KEY | 工具ID (UUID) |[m
+[31m-| zh_name | VARCHAR | | 工具中文名称 |[m
+[31m-| en_name | VARCHAR | | 工具英文名称 |[m
+[31m-| user_id | VARCHAR | | 创建用户ID |[m
+[31m-| logo_url | VARCHAR | | 工具Logo URL |[m
+[31m-| description | TEXT | | 工具描述 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |### MCP[m
+[31m-服务器管理表结构[m
+[31m-[m
+[31m-#### MCP服务器表 (mcp_server)[m
+[31m-存储MCP服务器的配置信息和连接参数。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| mcp_server_id | VARCHAR | PRIMARY KEY | MCP服务器ID (UUID) |[m
+[31m-| server_name | VARCHAR | | 服务器名称 |[m
+[31m-| user_id | VARCHAR | | 创建用户ID |[m
+[31m-| user_name | VARCHAR | | 创建用户名称 |[m
+[31m-| description | VARCHAR | | 服务器描述 |[m
+[31m-| mcp_as_tool_name | VARCHAR | | 作为工具时的名称 |[m
+[31m-| url | VARCHAR | | 连接地址 |[m
+[31m-| type | VARCHAR(255) | | 连接类型 (sse/websocket/stdio) |[m
+[31m-| logo_url | VARCHAR | | Logo URL |[m
+[31m-| config | JSON | | 配置信息 |[m
+[31m-| tools | JSON | | 工具列表 |[m
+[31m-| params | JSON | | 输入参数 |[m
+[31m-| config_enabled | BOOLEAN | DEFAULT: FALSE | 是否需要用户配置 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### MCP Stdio服务器表 (mcp_stdio_server)[m
+[31m-存储MCP Stdio服务器的特殊配置。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| mcp_server_id | VARCHAR | PRIMARY KEY | 服务器ID (UUID) |[m
+[31m-| mcp_server_path | VARCHAR | | 脚本路径 |[m
+[31m-| mcp_server_command | VARCHAR | | 执行命令 |[m
+[31m-| mcp_server_env | VARCHAR | | 环境变量 |[m
+[31m-| user_id | VARCHAR | | 创建用户ID |[m
+[31m-| name | VARCHAR | DEFAULT: "MCP Server" | 服务器名称 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-[m
+[31m-#### MCP用户配置表 (mcp_user_config)[m
+[31m-存储用户与MCP服务器的绑定配置和认证信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 配置ID (UUID) |[m
+[31m-| mcp_server_id | VARCHAR | | MCP服务器ID |[m
+[31m-| user_id | VARCHAR | | 用户ID |[m
+[31m-| config | JSON | | 鉴权配置信息 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 消息反馈表结构[m
+[31m-[m
+[31m-#### 消息点赞表 (message_like)[m
+[31m-存储用户对AI回复的正面反馈。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 记录ID (UUID) |[m
+[31m-| user_input | TEXT | | 用户输入内容 |[m
+[31m-| agent_output | TEXT | | 智能体输出内容 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 消息踩表 (message_down)[m
+[31m-存储用户对AI回复的负面反馈。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 记录ID (UUID) |[m
+[31m-| user_input | TEXT | | 用户输入内容 |[m
+[31m-| agent_output | TEXT | | 智能体输出内容 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 统计和记录表结构[m
+[31m-[m
+[31m-#### 使用统计表 (usage_stats)[m
+[31m-记录智能体和模型的使用统计信息，用于成本控制和性能分析。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 统计记录ID (UUID) |[m
+[31m-| agent | VARCHAR | | 智能体名称 |[m
+[31m-| model | VARCHAR | | 模型名称 |[m
+[31m-| user_id | VARCHAR | | 用户ID |[m
+[31m-| input_tokens | INT | DEFAULT: 0 | 输入Token数量 |[m
+[31m-| output_tokens | INT | DEFAULT: 0 | 输出Token数量 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-[m
+[31m-#### 记忆历史表 (memory_history)[m
+[31m-记录智能体记忆的变更历史，支持记忆版本控制。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 记录ID (UUID) |[m
+[31m-| memory_id | VARCHAR | | 记忆ID |[m
+[31m-| old_memory | TEXT | | 旧记忆内容 |[m
+[31m-| new_memory | TEXT | | 新记忆内容 |[m
+[31m-| event | VARCHAR | | 事件类型 |[m
+[31m-| actor_id | VARCHAR | | 操作者ID |[m
+[31m-| role | VARCHAR | | 角色 |[m
+[31m-| is_deleted | BOOLEAN | DEFAULT: FALSE | 是否删除 |[m
+[31m-| created_at | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| updated_at | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-## 数据库设计特点[m
+[31m-[m
+[31m-### 1. 统一的基础模型[m
+[31m-所有表都继承自 `SQLModelSerializable` 基类，提供统一的序列化和时间戳管理功能。[m
+[31m-[m
+[31m-### 2. UUID主键策略[m
+[31m-大部分表使用UUID作为主键，确保分布式环境下的唯一性和安全性。[m
+[31m-[m
+[31m-### 3. 软删除支持[m
+[31m-部分表支持软删除机制，通过 `delete` 或 `is_deleted` 字段标记，保证数据的可恢复性。[m
+[31m-[m
+[31m-### 4. JSON字段使用[m
+[31m-广泛使用JSON字段存储复杂的配置信息和列表数据，提高数据模型的灵活性。[m
+[31m-[m
+[31m-### 5. 时间戳自动管理[m
+[31m-所有表都包含 `create_time` 和 `update_time` 字段，由数据库自动维护。[m
+[31m-[m
+[31m-### 6. 索引优化策略[m
+[31m-- 用户相关字段 (`user_id`) 建立索引[m
+[31m-- 关联字段 (`dialog_id`, `knowledge_id` 等) 建立索引[m
+[31m-- 唯一性约束字段 (`user_name`, `knowledge.name`) 建立唯一索引[m
+[31m-- 查询频繁的字段建立复合索引[m
+[31m-[m
+[31m-### 7. 数据完整性保证[m
+[31m-- 外键关系通过应用层维护[m
+[31m-- 必填字段使用 NOT NULL 约束[m
+[31m-- 枚举值通过应用层验证[m
+[31m-- 字符串长度限制防止数据溢出[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-# 部署与配置[m
+[31m-[m
+[31m-## 系统架构[m
+[31m-[m
+[31m-AgentChat 采用微服务架构，支持Docker容器化部署，提供高可用性和可扩展性。[m
+[31m-[m
+[31m-### 核心组件[m
+[31m-- **前端服务**: React + TypeScript 构建的现代化Web界面[m
+[31m-- **后端服务**: FastAPI + Python 构建的高性能API服务[m
+[31m-- **数据库**: MySQL 8.0 提供数据持久化[m
+[31m-- **缓存**: Redis 提供高性能缓存[m
+[31m-- **向量数据库**: Milvus 提供语义检索能力[m
+[31m-- **搜索引擎**: Elasticsearch 提供全文检索[m
+[31m-- **对象存储**: 阿里云OSS 提供文件存储[m
+[31m-[m
+[31m-### 部署方式[m
+[31m-[m
+[31m-#### Docker Compose 部署[m
+[31m-[m
+[31m-```yaml[m
+[31m-version: '3.8'[m
+[31m-services:[m
+[31m-  frontend:[m
+[31m-    build:[m
+[31m-      context: ..[m
+[31m-      dockerfile: docker/Dockerfile.frontend[m
+[31m-    ports:[m
+[31m-      - "3000:3000"[m
+[31m-[m
+[31m-  backend:[m
+[31m-    build:[m
+[31m-      context: ..[m
+[31m-      dockerfile: docker/Dockerfile[m
+[31m-    ports:[m
+[31m-      - "8000:8000"[m
+[31m-    depends_on:[m
+[31m-      - mysql[m
+[31m-      - redis[m
+[31m-[m
+[31m-  mysql:[m
+[31m-    image: mysql:8.0[m
+[31m-    environment:[m
+[31m-      MYSQL_ROOT_PASSWORD: root123[m
+[31m-      MYSQL_DATABASE: agentchat[m
+[31m-      MYSQL_USER: agentchat_user[m
+[31m-      MYSQL_PASSWORD: 123456[m
+[31m-[m
+[31m-  redis:[m
+[31m-    image: redis:7-alpine[m
+[31m-    ports:[m
+[31m-      - "6379:6379"[m
+[31m-```[m
+[31m-[m
+[31m-#### 生产环境部署[m
+[31m-```bash[m
+[31m-# 启动生产环境[m
+[31m-docker-compose -f docker/docker-compose.prod.yml up -d[m
+[31m-[m
+[31m-# 停止服务[m
+[31m-./docker/stop.sh[m
+[31m-[m
+[31m-# 启动服务[m
+[31m-./docker/start_linux.sh[m
+[31m-```[m
+[31m-[m
+[31m-## 环境配置[m
+[31m-[m
+[31m-### 环境变量配置[m
+[31m-```bash[m
+[31m-# 数据库配置[m
+[31m-DATABASE_URL=mysql://agentchat_user:123456@mysql:3306/agentchat[m
+[31m-[m
+[31m-# Redis配置[m
+[31m-REDIS_URL=redis://redis:6379/0[m
+[31m-[m
+[31m-# 对象存储配置[m
+[31m-OSS_ACCESS_KEY_ID=your_access_key[m
+[31m-OSS_ACCESS_KEY_SECRET=your_secret_key[m
+[31m-OSS_BUCKET_NAME=your_bucket_name[m
+[31m-OSS_ENDPOINT=your_endpoint[m
+[31m-[m
+[31m-# 模型配置[m
+[31m-OPENAI_API_KEY=your_openai_key[m
+[31m-OPENAI_BASE_URL=https://api.openai.com/v1[m
+[31m-[m
+[31m-# 搜索配置[m
+[31m-TAVILY_API_KEY=your_tavily_key[m
+[31m-```[m
+[31m-[m
+[31m-### 配置文件[m
+[31m-系统支持多种配置方式：[m
+[31m-- 环境变量配置[m
+[31m-- 配置文件 (config.yaml)[m
+[31m-- 数据库配置存储[m
+[31m-- 运行时动态配置[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-# 最佳实践[m
+[31m-[m
+[31m-## 性能优化[m
+[31m-[m
+[31m-### 1. 数据库优化[m
+[31m-- **索引优化**: 为频繁查询的字段建立合适的索引[m
+[31m-- **查询优化**: 使用分页查询，避免大量数据加载[m
+[31m-- **连接池**: 合理配置数据库连接池大小[m
+[31m-- **读写分离**: 在高并发场景下使用读写分离[m
+[31m-[m
+[31m-### 2. 缓存策略[m
+[31m-- **Redis缓存**: 缓存频繁访问的数据[m
+[31m-- **应用缓存**: 使用内存缓存减少数据库访问[m
+[31m-- **CDN加速**: 静态资源使用CDN加速[m
+[31m-- **缓存预热**: 系统启动时预加载热点数据[m
+[31m-[m
+[31m-### 3. 异步处理[m
+[31m-- **异步API**: 所有I/O操作使用异步处理[m
+[31m-- **任务队列**: 长时间任务使用队列异步处理[m
+[31m-- **流式处理**: 大数据处理使用流式处理[m
+[31m-- **并发控制**: 合理控制并发数量避免资源竞争[m
+[31m-[m
+[31m-## 安全最佳实践[m
+[31m-[m
+[31m-### 1. 认证和授权[m
+[31m-- **JWT Token**: 使用JWT进行用户认证[m
+[31m-- **权限控制**: 基于角色的访问控制(RBAC)[m
+[31m-- **API限流**: 防止API滥用和攻击[m
+[31m-- **输入验证**: 严格验证所有用户输入[m
+[31m-[m
+[31m-### 2. 数据安全[m
+[31m-- **数据加密**: 敏感数据加密存储[m
+[31m-- **传输加密**: 使用HTTPS加密传输[m
+[31m-- **数据脱敏**: 日志中敏感信息脱敏[m
+[31m-- **备份策略**: 定期数据备份和恢复测试[m
+[31m-[m
+[31m-### 3. 代码安全[m
+[31m-- **沙箱执行**: 代码在安全沙箱中执行[m
+[31m-- **权限最小化**: 服务权限最小化原则[m
+[31m-- **依赖管理**: 定期更新依赖包修复安全漏洞[m
+[31m-- **安全审计**: 定期进行安全代码审计[m
+[31m-[m
+[31m-## 监控和运维[m
+[31m-[m
+[31m-### 1. 系统监控[m
+[31m-- **性能监控**: CPU、内存、磁盘使用率监控[m
+[31m-- **应用监控**: API响应时间、错误率监控[m
+[31m-- **业务监控**: 用户活跃度、功能使用情况监控[m
+[31m-- **告警机制**: 异常情况及时告警通知[m
+[31m-[m
+[31m-### 2. 日志管理[m
+[31m-- **结构化日志**: 使用结构化格式记录日志[m
+[31m-- **日志聚合**: 集中收集和分析日志[m
+[31m-- **日志轮转**: 定期清理历史日志[m
+[31m-- **敏感信息**: 避免在日志中记录敏感信息[m
+[31m-[m
+[31m-### 3. 故障处理[m
+[31m-- **健康检查**: 定期检查服务健康状态[m
+[31m-- **自动恢复**: 服务异常时自动重启[m
+[31m-- **降级策略**: 系统过载时的降级处理[m
+[31m-- **灾难恢复**: 完整的灾难恢复计划[m
+[31m-[m
+[31m-## 开发规范[m
+[31m-[m
+[31m-### 1. 代码规范[m
+[31m-- **代码风格**: 统一的代码格式和命名规范[m
+[31m-- **文档注释**: 完善的代码注释和文档[m
+[31m-- **单元测试**: 关键功能的单元测试覆盖[m
+[31m-- **代码审查**: 代码提交前的审查流程[m
+[31m-[m
+[31m-### 2. API设计[m
+[31m-- **RESTful**: 遵循RESTful API设计原则[m
+[31m-- **版本控制**: API版本管理和向后兼容[m
+[31m-- **错误处理**: 统一的错误响应格式[m
+[31m-- **文档维护**: 及时更新API文档[m
+[31m-[m
+[31m-### 3. 数据库设计[m
+[31m-- **规范化**: 遵循数据库规范化原则[m
+[31m-- **命名规范**: 统一的表名和字段命名[m
+[31m-- **索引设计**: 合理的索引设计策略[m
+[31m-- **迁移管理**: 数据库结构变更的版本管理[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 总结[m
+[31m-[m
+[31m-AgentChat 是一个功能完整、架构先进的企业级智能对话系统。通过本技术文档，客户可以全面了解系统的技术架构、功能特性和使用方法。[m
+[31m-[m
+[31m-### 核心优势[m
+[31m-[m
+[31m-1. **技术先进性**[m
+[31m-   - 基于最新的AI技术和框架[m
+[31m-   - 支持多种智能代理和模型[m
+[31m-   - 完整的RAG检索增强生成能力[m
+[31m-[m
+[31m-2. **企业级特性**[m
+[31m-   - 高性能异步架构[m
+[31m-   - 完善的安全机制[m
+[31m-   - 可扩展的微服务设计[m
+[31m-[m
+[31m-3. **易用性**[m
+[31m-   - 丰富的API接口[m
+[31m-   - 直观的用户界面[m
+[31m-   - 完善的文档和示例[m
+[31m-[m
+[31m-4. **可扩展性**[m
+[31m-   - 插件化架构设计[m
+[31m-   - MCP协议支持[m
+[31m-   - 灵活的配置管理[m
+[31m-[m
+[31m-### 适用场景[m
+[31m-[m
+[31m-- **企业智能客服**: 提供7x24小时智能客服服务[m
+[31m-- **知识管理系统**: 企业知识库的智能检索和问答[m
+[31m-- **代码助手**: 代码生成、分析和调试辅助[m
+[31m-- **业务流程自动化**: 复杂业务流程的智能化处理[m
+[31m-- **教育培训**: 智能化的教学和培训辅助[m
+[31m-[m
+[31m-通过合理配置和使用AgentChat系统，企业可以显著提升工作效率，降低人工成本，提供更好的用户体验。建议根据具体业务需求选择合适的功能模块，并遵循最佳实践以获得最佳效果。[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-*文档版本: 1.0*  [m
+[31m-*最后更新: 2024年11月*  [m
+[31m-*维护者: AgentChat 开发团队*[m
+\ No newline at end of file[m
+[1mdiff --git a/docs/reference/api.md b/docs/reference/api.md[m
+[1mdeleted file mode 100644[m
+[1mindex 292d0d0..0000000[m
+[1m--- a/docs/reference/api.md[m
+[1m+++ /dev/null[m
+[36m@@ -1,1079 +0,0 @@[m
+[31m-[m
+[31m-[m
+[31m-# AgentChat API 文档 v1.0[m
+[31m-[m
+[31m-本文档整理了 AgentChat 系统 v1 版本的所有 API 接口，包含接口 URL、请求方法、请求参数和返回参数。[m
+[31m-[m
+[31m-## 目录[m
+[31m-- [对话相关 API](#对话相关-api)[m
+[31m-- [知识库文件 API](#知识库文件-api)[m
+[31m-- [MCP 服务器 API](#mcp-服务器-api)[m
+[31m-- [用户 API](#用户-api)[m
+[31m-- [工具 API](#工具-api)[m
+[31m-- [大模型 API](#大模型-api)[m
+[31m-- [知识库 API](#知识库-api)[m
+[31m-- [对话框 API](#对话框-api)[m
+[31m-- [智能体 API](#智能体-api)[m
+[31m-- [MCP 用户配置 API](#mcp-用户配置-api)[m
+[31m-- [历史记录 API](#历史记录-api)[m
+[31m-- [消息 API](#消息-api)[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 对话相关 API[m
+[31m-[m
+[31m-### 1. 对话接口[m
+[31m-- **接口 URL**: `/api/v1/chat`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "dialog_id": "string",        // 对话ID[m
+[31m-    "user_input": "string",       // 用户输入内容[m
+[31m-    "file_url": "string"          // 可选，文件URL[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**: Server-Sent Events (SSE) 流式响应[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "chunk": "string",            // 响应片段[m
+[31m-    "type": "response_chunk"      // 事件类型[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 文件上传接口[m
+[31m-- **接口 URL**: `/api/v1/upload`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**: [m
+[31m-  - `file`: 上传的文件（支持 PDF、DOCX、TXT、JPG 等格式）[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "string",          // 文件访问URL[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 知识库检索接口[m
+[31m-- **接口 URL**: `/api/v1/knowledge/retrieval`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "query": "string",            // 用户问题[m
+[31m-    "knowledge_id": "string|array" // 知识库ID，可以是单个或数组[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": "string"              // 检索到的内容[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 知识库文件 API[m
+[31m-[m
+[31m-### 1. 创建知识库文件[m
+[31m-- **接口 URL**: `/api/v1/knowledge_file/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "knowledge_id": "string",     // 知识库ID[m
+[31m-    "file_url": "string"          // 文件上传后返回的URL[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 查询知识库文件[m
+[31m-- **接口 URL**: `/api/v1/knowledge_file/select`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**:[m
+[31m-  - `knowledge_id`: 知识库ID (Query参数)[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "file_id": "string",[m
+[31m-        "file_name": "string",[m
+[31m-        "file_url": "string",[m
+[31m-        "upload_time": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 删除知识库文件[m
+[31m-- **接口 URL**: `/api/v1/knowledge_file/delete`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "knowledge_file_id": "string" // 知识库文件ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## MCP 服务器 API[m
+[31m-[m
+[31m-### 1. 创建 MCP 服务器[m
+[31m-- **接口 URL**: `/api/v1/mcp_server`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  [m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "server_name": "string",      // MCP Server名称[m
+[31m-    "url": "string",              // MCP Server URL[m
+[31m-    "type": "string",             // 连接方式（SSE、Websocket）[m
+[31m-    "config": {}                  // 可选，MCP Server配置信息[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 获取 MCP 服务器列表[m
+[31m-- **接口 URL**: `/api/v1/mcp_server`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "server_id": "string",[m
+[31m-        "server_name": "string",[m
+[31m-        "url": "string",[m
+[31m-        "type": "string",[m
+[31m-        "config": {},[m
+[31m-        "tools": ["string"][m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 删除 MCP 服务器[m
+[31m-- **接口 URL**: `/api/v1/mcp_server`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "server_id": "string"         // MCP Server ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 4. 获取 MCP 工具信息[m
+[31m-- **接口 URL**: `/api/v1/mcp_tools`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "server_id": "string"         // MCP Server ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": {[m
+[31m-      "tools": [[m
+[31m-        {[m
+[31m-          "name": "string",[m
+[31m-          "description": "string",[m
+[31m-          "parameters": {}[m
+[31m-        }[m
+[31m-      ][m
+[31m-    }[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 5. 更新 MCP 服务器[m
+[31m-- **接口 URL**: `/api/v1/mcp_server`[m
+[31m-- **请求方法**: `PUT`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "server_id": "string",        // MCP Server ID[m
+[31m-    "server_name": "string",      // 可选，MCP Server名称[m
+[31m-    "url": "string",              // 可选，MCP Server URL[m
+[31m-    "type": "string",             // 可选，连接方式[m
+[31m-    "config": {}                  // 可选，MCP Server配置信息[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 用户 API[m
+[31m-[m
+[31m-### 1. 用户注册[m
+[31m-- **接口 URL**: `/api/v1/user/register`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  [m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_name": "string",        // 用户名[m
+[31m-    "user_email": "string",       // 可选，用户邮箱[m
+[31m-    "user_password": "string"     // 用户密码[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 用户登录[m
+[31m-- **接口 URL**: `/api/v1/user/login`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_name": "string",        // 用户名[m
+[31m-    "user_password": "string"     // 用户密码[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": {[m
+[31m-      "user_id": "string",[m
+[31m-      "access_token": "string"[m
+[31m-    }[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 更新用户信息[m
+[31m-- **接口 URL**: `/api/v1/user/login`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_avatar": "string",        // 用户上传头像或选择头像的链接[m
+[31m-    "user_description": "string"    // 用户的描述，默认就是：该用户很懒，没有留下一片云彩[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": {[m
+[31m-      [m
+[31m-    }[m
+[31m-  }[m
+[31m-[m
+[31m-### 4. 用户头像选择[m
+[31m-- **接口 URL**: `/api/v1/user/icons`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": ["http://........", "https://........."][m
+[31m-  }[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 工具 API[m
+[31m-[m
+[31m-### 1. 创建工具[m
+[31m-- **接口 URL**: `/api/v1/tool/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "zh_name": "string",          // 工具中文名称[m
+[31m-    "en_name": "string",          // 工具英文名称[m
+[31m-    "description": "string",      // 工具描述[m
+[31m-    "logo_url": "string"          // 工具图标URL[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": {[m
+[31m-      "tool_id": "string"[m
+[31m-    }[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 获取所有工具[m
+[31m-- **接口 URL**: `/api/v1/tool/all`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "tool_id": "string",[m
+[31m-        "zh_name": "string",[m
+[31m-        "en_name": "string",[m
+[31m-        "description": "string",[m
+[31m-        "logo_url": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 获取个人工具[m
+[31m-- **接口 URL**: `/api/v1/tool/own`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "tool_id": "string",[m
+[31m-        "zh_name": "string",[m
+[31m-        "en_name": "string",[m
+[31m-        "description": "string",[m
+[31m-        "logo_url": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 4. 获取可见工具[m
+[31m-- **接口 URL**: `/api/v1/tool/visible`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "tool_id": "string",[m
+[31m-        "zh_name": "string",[m
+[31m-        "en_name": "string",[m
+[31m-        "description": "string",[m
+[31m-        "logo_url": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 5. 删除工具[m
+[31m-- **接口 URL**: `/api/v1/tool/delete`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "tool_id": "string"           // 工具ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 6. 更新工具[m
+[31m-- **接口 URL**: `/api/v1/tool/update`[m
+[31m-- **请求方法**: `PUT`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "tool_id": "string",          // 工具ID[m
+[31m-    "zh_name": "string",          // 可选，工具中文名称[m
+[31m-    "en_name": "string",          // 可选，工具英文名称[m
+[31m-    "description": "string",      // 可选，工具描述[m
+[31m-    "logo_url": "string"          // 可选，工具图标URL[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 大模型 API[m
+[31m-[m
+[31m-### 1. 创建大模型[m
+[31m-- **接口 URL**: `/api/v1/llm/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "model": "string",            // 大模型名称[m
+[31m-    "api_key": "string",          // API密钥[m
+[31m-    "base_url": "string",         // 基础URL[m
+[31m-    "provider": "string",         // 提供商[m
+[31m-    "llm_type": "string"          // 模型类型[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 删除大模型[m
+[31m-- **接口 URL**: `/api/v1/llm/delete`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "llm_id": "string"            // 大模型ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 更新大模型[m
+[31m-- **接口 URL**: `/api/v1/llm/update`[m
+[31m-- **请求方法**: `PUT`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "llm_id": "string",           // 大模型ID[m
+[31m-    "model": "string",            // 可选，大模型名称[m
+[31m-    "api_key": "string",          // 可选，API密钥[m
+[31m-    "base_url": "string",         // 可选，基础URL[m
+[31m-    "provider": "string",         // 可选，提供商[m
+[31m-    "llm_type": "string"          // 可选，模型类型[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 4. 获取所有大模型[m
+[31m-- **接口 URL**: `/api/v1/llm/all`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "llm_id": "string",[m
+[31m-        "model": "string",[m
+[31m-        "provider": "string",[m
+[31m-        "llm_type": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 5. 获取个人大模型[m
+[31m-- **接口 URL**: `/api/v1/llm/personal`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "llm_id": "string",[m
+[31m-        "model": "string",[m
+[31m-        "provider": "string",[m
+[31m-        "llm_type": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 6. 获取可见大模型[m
+[31m-- **接口 URL**: `/api/v1/llm/visible`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "llm_id": "string",[m
+[31m-        "model": "string",[m
+[31m-        "provider": "string",[m
+[31m-        "llm_type": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 7. 获取大模型类型[m
+[31m-- **接口 URL**: `/api/v1/llm/schema`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": ["LLM", "Embedding"][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 知识库 API[m
+[31m-[m
+[31m-### 1. 创建知识库[m
+[31m-- **接口 URL**: `/api/v1/knowledge/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "knowledge_name": "string",   // 知识库名称[m
+[31m-    "knowledge_desc": "string"    // 知识库描述[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 查询知识库[m
+[31m-- **接口 URL**: `/api/v1/knowledge/select`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "knowledge_id": "string",[m
+[31m-        "knowledge_name": "string",[m
+[31m-        "knowledge_desc": "string",[m
+[31m-        "create_time": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 更新知识库[m
+[31m-- **接口 URL**: `/api/v1/knowledge/update`[m
+[31m-- **请求方法**: `PUT`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "knowledge_id": "string",     // 知识库ID[m
+[31m-    "knowledge_name": "string",   // 可选，知识库名称[m
+[31m-    "knowledge_desc": "string"    // 可选，知识库描述[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 4. 删除知识库[m
+[31m-- **接口 URL**: `/api/v1/knowledge/delete`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "knowledge_id": "string"      // 知识库ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 对话框 API[m
+[31m-[m
+[31m-### 1. 获取对话列表[m
+[31m-- **接口 URL**: `/api/v1/dialog/list`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "dialog_id": "string",[m
+[31m-        "name": "string",[m
+[31m-        "agent_id": "string",[m
+[31m-        "agent_type": "string",[m
+[31m-        "create_time": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 创建对话[m
+[31m-- **接口 URL**: `/api/v1/dialog`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "name": "string",             // 对话名称[m
+[31m-    "agent_id": "string",         // 智能体ID[m
+[31m-    "agent_type": "string"        // 智能体类型[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 删除对话[m
+[31m-- **接口 URL**: `/api/v1/dialog`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "dialog_id": "string"         // 对话ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 智能体 API[m
+[31m-[m
+[31m-### 1. 创建智能体[m
+[31m-- **接口 URL**: `/api/v1/agent`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "name": "string",             // 智能体名称[m
+[31m-    "description": "string",      // 智能体描述[m
+[31m-    "logo_url": "string",         // 智能体图标URL[m
+[31m-    "tool_ids": ["string"],       // 工具ID列表[m
+[31m-    "llm_id": "string",           // 大模型ID[m
+[31m-    "mcp_ids": ["string"],        // MCP服务器ID列表[m
+[31m-    "system_prompt": "string",    // 系统提示词[m
+[31m-    "knowledge_ids": ["string"],  // 知识库ID列表[m
+[31m-    "use_embedding": boolean      // 是否使用嵌入[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 获取智能体[m
+[31m-- **接口 URL**: `/api/v1/agent`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: 无[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "agent_id": "string",[m
+[31m-        "name": "string",[m
+[31m-        "description": "string",[m
+[31m-        "logo_url": "string",[m
+[31m-        "tool_ids": ["string"],[m
+[31m-        "llm_id": "string",[m
+[31m-        "mcp_ids": ["string"],[m
+[31m-        "system_prompt": "string",[m
+[31m-        "knowledge_ids": ["string"],[m
+[31m-        "use_embedding": boolean[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 删除智能体[m
+[31m-- **接口 URL**: `/api/v1/agent`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "agent_id": "string"          // 智能体ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 4. 更新智能体[m
+[31m-- **接口 URL**: `/api/v1/agent`[m
+[31m-- **请求方法**: `PUT`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "agent_id": "string",         // 智能体ID[m
+[31m-    "name": "string",             // 可选，智能体名称[m
+[31m-    "description": "string",      // 可选，智能体描述[m
+[31m-    "logo_url": "string",         // 可选，智能体图标URL[m
+[31m-    "tool_ids": ["string"],       // 可选，工具ID列表[m
+[31m-    "llm_id": "string",           // 可选，大模型ID[m
+[31m-    "mcp_ids": ["string"],        // 可选，MCP服务器ID列表[m
+[31m-    "system_prompt": "string",    // 可选，系统提示词[m
+[31m-    "knowledge_ids": ["string"],  // 可选，知识库ID列表[m
+[31m-    "use_embedding": boolean      // 可选，是否使用嵌入[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 5. 搜索智能体[m
+[31m-- **接口 URL**: `/api/v1/agent/search`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "name": "string"              // 搜索的智能体名称[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "agent_id": "string",[m
+[31m-        "name": "string",[m
+[31m-        "description": "string",[m
+[31m-        "logo_url": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## MCP 用户配置 API[m
+[31m-[m
+[31m-### 1. 创建 MCP 用户配置[m
+[31m-- **接口 URL**: `/api/v1/mcp_user_config/create`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "mcp_server_id": "string",    // MCP服务器ID[m
+[31m-    "config": {}                  // 配置信息[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": {[m
+[31m-      "config_id": "string"[m
+[31m-    }[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 根据ID获取 MCP 用户配置[m
+[31m-- **接口 URL**: `/api/v1/mcp_user_config/{config_id}`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**: [m
+[31m-  - `config_id`: 配置ID (路径参数)[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": {[m
+[31m-      "config_id": "string",[m
+[31m-      "mcp_server_id": "string",[m
+[31m-      "config": {}[m
+[31m-    }[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 3. 更新 MCP 用户配置[m
+[31m-- **接口 URL**: `/api/v1/mcp_user_config/update`[m
+[31m-- **请求方法**: `PUT`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "config_id": "string",        // 配置ID[m
+[31m-    "mcp_server_id": "string",    // 可选，MCP服务器ID[m
+[31m-    "config": {}                  // 可选，配置信息[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 4. 删除 MCP 用户配置[m
+[31m-- **接口 URL**: `/api/v1/mcp_user_config/delete`[m
+[31m-- **请求方法**: `DELETE`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "config_id": "string"         // 配置ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 5. 获取 MCP 用户配置[m
+[31m-- **接口 URL**: `/api/v1/mcp_user_config`[m
+[31m-- **请求方法**: `GET`[m
+[31m-- **请求参数**:[m
+[31m-  - `mcp_server_id`: MCP服务器ID (Query参数)[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": {[m
+[31m-      "config_id": "string",[m
+[31m-      "mcp_server_id": "string",[m
+[31m-      "config": {}[m
+[31m-    }[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 历史记录 API[m
+[31m-[m
+[31m-### 1. 获取对话历史[m
+[31m-- **接口 URL**: `/api/v1/history`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "dialog_id": "string"         // 对话ID[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": [[m
+[31m-      {[m
+[31m-        "message_id": "string",[m
+[31m-        "role": "string",[m
+[31m-        "content": "string",[m
+[31m-        "timestamp": "string"[m
+[31m-      }[m
+[31m-    ][m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 消息 API[m
+[31m-[m
+[31m-### 1. 消息点赞[m
+[31m-- **接口 URL**: `/api/v1/message/like`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  [m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_input": "string",       // 用户输入[m
+[31m-    "agent_output": "string"      // 智能体输出[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m-### 2. 消息踩[m
+[31m-- **接口 URL**: `/api/v1/message/down`[m
+[31m-- **请求方法**: `POST`[m
+[31m-- **请求参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "user_input": "string",       // 用户输入[m
+[31m-    "agent_output": "string"      // 智能体输出[m
+[31m-  }[m
+[31m-  ```[m
+[31m-- **返回参数**:[m
+[31m-  ```json[m
+[31m-  {[m
+[31m-    "code": 200,[m
+[31m-    "message": "success",[m
+[31m-    "data": null[m
+[31m-  }[m
+[31m-  ```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 通用返回格式[m
+[31m-[m
+[31m-所有接口的返回格式都遵循统一的响应模型：[m
+[31m-[m
+[31m-```json[m
+[31m-{[m
+[31m-  "code": 200,                    // 状态码，200表示成功，500表示失败[m
+[31m-  "message": "string",            // 返回消息[m
+[31m-  "data": "any"                   // 返回数据，根据具体接口而定[m
+[31m-}[m
+[31m-```[m
+[31m-[m
+[31m-## 认证说明[m
+[31m-[m
+[31m-除了用户注册和登录接口外，所有接口都需要用户登录认证。认证方式为 JWT Token，需要在请求头中携带 Token 或通过 Cookie 传递。[m
+[31m-[m
+[31m-## 错误处理[m
+[31m-[m
+[31m-当接口调用失败时，会返回相应的错误信息：[m
+[31m-[m
+[31m-```json[m
+[31m-{[m
+[31m-  "code": 500,[m
+[31m-  "message": "具体的错误信息",[m
+[31m-  "data": null[m
+[31m-}[m
+[31m-```[m
+[31m-[m
+[31m-常见错误码：[m
+[31m-- `400`: 请求参数错误[m
+[31m-- `401`: 未认证或认证失败[m
+[31m-- `403`: 权限不足[m
+[31m-- `404`: 资源不存在[m
+[31m-- `500`: 服务器内部错误 [m
+\ No newline at end of file[m
+[1mdiff --git a/docs/reference/core.md b/docs/reference/core.md[m
+[1mdeleted file mode 100644[m
+[1mindex 2f10c71..0000000[m
+[1m--- a/docs/reference/core.md[m
+[1m+++ /dev/null[m
+[36m@@ -1,611 +0,0 @@[m
+[31m-# AgentChat 核心架构技术文档[m
+[31m-[m
+[31m-## 概述[m
+[31m-[m
+[31m-AgentChat 核心架构是整个系统的基础框架，提供了智能代理、模型管理、回调处理等核心功能。本文档详细介绍了核心架构的设计理念、组件功能和使用方法，为开发者和系统集成商提供全面的技术参考。[m
+[31m-[m
+[31m-## 目录[m
+[31m-[m
+[31m-1. [智能代理架构](#智能代理架构)[m
+[31m-2. [模型管理系统](#模型管理系统)[m
+[31m-3. [回调处理机制](#回调处理机制)[m
+[31m-4. [架构设计原则](#架构设计原则)[m
+[31m-5. [最佳实践指南](#最佳实践指南)[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 智能代理架构[m
+[31m-[m
+[31m-### 代理类型概览[m
+[31m-[m
+[31m-AgentChat 提供了多种类型的智能代理，每种代理都针对特定的使用场景进行了优化：[m
+[31m-[m
+[31m-- **ReactAgent**: 基于推理-行动循环的通用代理[m
+[31m-- **CodeActAgent**: 专门用于代码生成和执行的代理[m
+[31m-- **PlanExecuteAgent**: 基于规划-执行范式的复杂任务代理[m
+[31m-- **MCPAgent**: 支持模型上下文协议的代理[m
+[31m-- **StructuredResponseAgent**: 结构化响应代理[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-### ReactAgent - 推理行动代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-ReactAgent 是基于 LangGraph 的 ReAct (Reasoning and Acting) 代理，支持流式输出和自定义事件发送。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **推理-行动循环**: 实现思考-行动-观察的智能循环[m
+[31m-- **流式处理**: 支持实时流式输出和事件通知[m
+[31m-- **工具集成**: 无缝集成各种外部工具和服务[m
+[31m-- **状态管理**: 基于 LangGraph 的状态机管理[m
+[31m-[m
+[31m-**架构设计**[m
+[31m-[m
+[31m-```python[m
+[31m-class ReactAgent:[m
+[31m-    def __init__(self, model: BaseChatModel, system_prompt: str, tools: List[BaseTool]):[m
+[31m-        self.model = model[m
+[31m-        self.system_prompt = system_prompt[m
+[31m-        self.tools = tools[m
+[31m-        self.graph = None  # LangGraph 实例[m
+[31m-```[m
+[31m-[m
+[31m-**核心流程**[m
+[31m-1. **工具选择**: 分析用户输入，选择合适的工具[m
+[31m-2. **工具执行**: 执行选定的工具并获取结果[m
+[31m-3. **结果整合**: 将工具结果整合到对话上下文中[m
+[31m-4. **响应生成**: 基于完整上下文生成最终响应[m
+[31m-[m
+[31m-**流式输出结构**[m
+[31m-```python[m
+[31m-class StreamOutput(TypedDict):[m
+[31m-    type: str          # "event" 或 "response_chunk"[m
+[31m-    timestamp: float   # 时间戳[m
+[31m-    data: Dict[str, Any]  # 事件数据或响应内容[m
+[31m-```[m
+[31m-[m
+[31m-**使用示例**[m
+[31m-```python[m
+[31m-# 创建 ReactAgent[m
+[31m-agent = ReactAgent([m
+[31m-    model=model,[m
+[31m-    system_prompt="你是一个有用的助手",[m
+[31m-    tools=[search_tool, calculator_tool][m
+[31m-)[m
+[31m-[m
+[31m-# 流式调用[m
+[31m-async for output in agent.astream(messages):[m
+[31m-    if output["type"] == "event":[m
+[31m-        print(f"事件: {output['data']['title']}")[m
+[31m-    elif output["type"] == "response_chunk":[m
+[31m-        print(f"响应: {output['data']['chunk']}")[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-### CodeActAgent - 代码执行代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-CodeActAgent 专门设计用于代码生成、执行和调试，提供安全的代码执行环境。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **代码生成**: 基于自然语言生成 Python 代码[m
+[31m-- **安全执行**: 在沙箱环境中安全执行代码[m
+[31m-- **上下文保持**: 维护代码执行的上下文状态[m
+[31m-- **工具集成**: 支持在代码中调用外部工具[m
+[31m-[m
+[31m-**执行流程**[m
+[31m-1. **代码提取**: 从模型响应中提取代码块[m
+[31m-2. **环境准备**: 准备执行环境和工具上下文[m
+[31m-3. **代码执行**: 在沙箱中执行代码[m
+[31m-4. **结果处理**: 处理执行结果和错误[m
+[31m-[m
+[31m-**沙箱集成**[m
+[31m-```python[m
+[31m-def create_pyodide_eval_fn(self, sandbox: PyodideSandbox) -> EvalCoroutine:[m
+[31m-    async def async_eval_fn(code: str, _locals: dict) -> tuple[str, dict]:[m
+[31m-        # 在 Pyodide 沙箱中执行代码[m
+[31m-        response = await sandbox.execute(code=code)[m
+[31m-        return response.stdout, response.result[m
+[31m-    return async_eval_fn[m
+[31m-```[m
+[31m-[m
+[31m-**状态管理**[m
+[31m-```python[m
+[31m-class CodeActState(MessagesState):[m
+[31m-    script: Optional[str]           # 待执行的 Python 脚本[m
+[31m-    context: dict[str, Any]         # 执行上下文[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-### PlanExecuteAgent - 规划执行代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-PlanExecuteAgent 采用规划-执行范式，先制定执行计划，再逐步执行，适用于复杂的多步骤任务。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **战略规划**: 分析任务并制定执行计划[m
+[31m-- **工具编排**: 智能选择和编排工具调用[m
+[31m-- **MCP 集成**: 支持模型上下文协议工具[m
+[31m-- **错误恢复**: 自动 JSON 修复和错误处理[m
+[31m-[m
+[31m-**执行阶段**[m
+[31m-[m
+[31m-#### 1. 规划阶段[m
+[31m-```python[m
+[31m-async def _plan_agent_actions(self, messages: List[BaseMessage]):[m
+[31m-    # 使用结构化响应代理生成执行计划[m
+[31m-    structured_response_agent = StructuredResponseAgent(response_format=PlanToolFlow)[m
+[31m-    response = structured_response_agent.get_structured_response(call_messages)[m
+[31m-    return json.loads(response.content)[m
+[31m-```[m
+[31m-[m
+[31m-#### 2. 执行阶段[m
+[31m-```python[m
+[31m-async def _execute_agent_actions(self, agent_plans):[m
+[31m-    # 根据计划逐步执行工具调用[m
+[31m-    for step, plan in agent_plans.items():[m
+[31m-        response = await tool_call_model.ainvoke(call_tool_messages)[m
+[31m-        tool_messages = await self._execute_tool(response)[m
+[31m-```[m
+[31m-[m
+[31m-**计划结构**[m
+[31m-```python[m
+[31m-class PlanToolFlow(BaseModel):[m
+[31m-    steps: Dict[str, List[Dict[str, Any]]]  # 执行步骤[m
+[31m-    reasoning: str                          # 规划推理[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-### MCPAgent - 模型上下文协议代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-MCPAgent 专门用于集成支持模型上下文协议（MCP）的外部服务和工具。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **MCP 协议支持**: 完整支持 MCP 协议规范[m
+[31m-- **动态工具加载**: 动态发现和加载 MCP 工具[m
+[31m-- **用户配置**: 支持用户个性化配置[m
+[31m-- **事件流**: 实时事件通知和状态更新[m
+[31m-[m
+[31m-**配置结构**[m
+[31m-```python[m
+[31m-class MCPConfig(BaseModel):[m
+[31m-    url: str                    # MCP 服务器 URL[m
+[31m-    type: str = "sse"          # 连接类型[m
+[31m-    tools: List[str] = []      # 可用工具列表[m
+[31m-    server_name: str           # 服务器名称[m
+[31m-    mcp_server_id: str         # 服务器 ID[m
+[31m-```[m
+[31m-[m
+[31m-**中间件系统**[m
+[31m-```python[m
+[31m-@wrap_tool_call[m
+[31m-async def add_tool_call_args(request: ToolCallRequest, handler):[m
+[31m-    # 添加用户配置到工具调用参数[m
+[31m-    mcp_config = await MCPUserConfigService.get_mcp_user_config([m
+[31m-        self.user_id, self.mcp_config.mcp_server_id[m
+[31m-    )[m
+[31m-    request.tool_call["args"].update(mcp_config)[m
+[31m-    return await handler(request)[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-### StructuredResponseAgent - 结构化响应代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-StructuredResponseAgent 专门用于生成结构化的响应，确保输出符合预定义的数据格式。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **格式约束**: 强制输出符合指定的 Pydantic 模型[m
+[31m-- **类型安全**: 确保响应数据的类型安全性[m
+[31m-- **验证机制**: 自动验证输出格式的正确性[m
+[31m-[m
+[31m-**使用方式**[m
+[31m-```python[m
+[31m-class ResponseFormat(BaseModel):[m
+[31m-    answer: str[m
+[31m-    confidence: float[m
+[31m-    sources: List[str][m
+[31m-[m
+[31m-agent = StructuredResponseAgent(response_format=ResponseFormat)[m
+[31m-response = agent.get_structured_response(messages)[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 模型管理系统[m
+[31m-[m
+[31m-### ModelManager - 统一模型管理器[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-ModelManager 提供了统一的模型管理接口，支持多种类型的语言模型和专用模型。[m
+[31m-[m
+[31m-**支持的模型类型**[m
+[31m-- **对话模型**: 用于一般对话和文本生成[m
+[31m-- **工具调用模型**: 专门用于工具调用和函数执行[m
+[31m-- **推理模型**: 支持复杂推理任务[m
+[31m-- **嵌入模型**: 用于文本向量化[m
+[31m-- **视觉语言模型**: 支持图像理解和描述[m
+[31m-[m
+[31m-**核心方法**[m
+[31m-```python[m
+[31m-class ModelManager:[m
+[31m-    @classmethod[m
+[31m-    def get_conversation_model(cls) -> BaseChatModel:[m
+[31m-        # 获取对话模型[m
+[31m-        [m
+[31m-    @classmethod[m
+[31m-    def get_tool_invocation_model(cls) -> BaseChatModel:[m
+[31m-        # 获取工具调用模型[m
+[31m-        [m
+[31m-    @classmethod[m
+[31m-    def get_reasoning_model(cls) -> ReasoningModel:[m
+[31m-        # 获取推理模型[m
+[31m-        [m
+[31m-    @classmethod[m
+[31m-    def get_embedding_model(cls) -> EmbeddingModel:[m
+[31m-        # 获取嵌入模型[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-### 专用模型实现[m
+[31m-[m
+[31m-#### EmbeddingModel - 嵌入模型[m
+[31m-[m
+[31m-**功能特性**[m
+[31m-- **同步/异步支持**: 支持同步和异步文本嵌入[m
+[31m-- **批量处理**: 高效的批量文本处理[m
+[31m-- **并发控制**: 智能并发控制和限流[m
+[31m-[m
+[31m-**核心方法**[m
+[31m-```python[m
+[31m-class EmbeddingModel:[m
+[31m-    def embed(self, query: str) -> List[float]:[m
+[31m-        # 同步嵌入单个文本[m
+[31m-        [m
+[31m-    async def embed_async(self, query: Union[str, List[str]]) -> Union[List[float], List[List[float]]]:[m
+[31m-        # 异步嵌入文本（支持批量）[m
+[31m-```[m
+[31m-[m
+[31m-**批量处理优化**[m
+[31m-```python[m
+[31m-# 自动分批处理大量文本[m
+[31m-batches = [query[i:i + 10] for i in range(0, len(query), 10)][m
+[31m-tasks = [process_batch(batch) for batch in batches][m
+[31m-results = await asyncio.gather(*tasks)[m
+[31m-```[m
+[31m-[m
+[31m-#### ReasoningModel - 推理模型[m
+[31m-[m
+[31m-**功能特性**[m
+[31m-- **流式推理**: 支持流式推理输出[m
+[31m-- **消息转换**: 自动转换 LangChain 消息格式[m
+[31m-- **工具调用**: 支持工具调用和函数执行[m
+[31m-[m
+[31m-**消息转换**[m
+[31m-```python[m
+[31m-def convert_message_to_dict(self, message: BaseMessage) -> dict:[m
+[31m-    # 将 LangChain 消息转换为 OpenAI 格式[m
+[31m-    if isinstance(message, HumanMessage):[m
+[31m-        return {"role": "user", "content": message.content}[m
+[31m-    elif isinstance(message, AIMessage):[m
+[31m-        return {"role": "assistant", "content": message.content}[m
+[31m-    # ... 其他消息类型[m
+[31m-```[m
+[31m-[m
+[31m-#### ChatModelWithTokenUsage - 带使用统计的聊天模型[m
+[31m-[m
+[31m-**功能特性**[m
+[31m-- **Token 统计**: 自动记录 Token 使用情况[m
+[31m-- **用户追踪**: 按用户和代理分类统计[m
+[31m-- **流式支持**: 支持流式输出的 Token 统计[m
+[31m-- **异步处理**: 完整的异步支持[m
+[31m-[m
+[31m-**使用统计**[m
+[31m-```python[m
+[31m-def _record_token_usage(self, usage: Any):[m
+[31m-    record = {[m
+[31m-        'model': self.model_name,[m
+[31m-        "agent": self.agent_name,[m
+[31m-        "user_id": self.user_id,[m
+[31m-        'input_tokens': usage.prompt_tokens,[m
+[31m-        'output_tokens': usage.completion_tokens,[m
+[31m-    }[m
+[31m-    UsageStatsService.sync_create_usage_stats(**record)[m
+[31m-```[m
+[31m-[m
+[31m-#### AnthropicModel - Anthropic 模型集成[m
+[31m-[m
+[31m-**功能特性**[m
+[31m-- **同步/异步支持**: 完整的同步和异步 API 支持[m
+[31m-- **流式输出**: 支持流式文本生成[m
+[31m-- **工具集成**: 支持 Anthropic 的工具调用功能[m
+[31m-[m
+[31m-**流式处理**[m
+[31m-```python[m
+[31m-async def ainvoke_stream(self, messages, available_tools=None):[m
+[31m-    async with self.messages.stream([m
+[31m-        model=self.model,[m
+[31m-        messages=messages,[m
+[31m-        tools=available_tools[m
+[31m-    ) as stream:[m
+[31m-        async for text in stream.text_stream:[m
+[31m-            yield text[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 回调处理机制[m
+[31m-[m
+[31m-### UsageMetadataCallbackHandler - 使用统计回调[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-UsageMetadataCallbackHandler 是一个专门用于追踪和记录模型使用情况的回调处理器。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **自动统计**: 自动收集 Token 使用统计[m
+[31m-- **多模型支持**: 支持多个模型的并发统计[m
+[31m-- **线程安全**: 使用锁机制确保线程安全[m
+[31m-- **上下文感知**: 自动获取用户和代理上下文[m
+[31m-[m
+[31m-**统计机制**[m
+[31m-```python[m
+[31m-class UsageMetadataCallbackHandler(BaseCallbackHandler):[m
+[31m-    def __init__(self):[m
+[31m-        self._lock = threading.Lock()[m
+[31m-        self.usage_metadata: dict[str, UsageMetadata] = {}[m
+[31m-    [m
+[31m-    def on_llm_end(self, response: LLMResult, **kwargs):[m
+[31m-        # 收集 Token 使用统计[m
+[31m-        with self._lock:[m
+[31m-            self.usage_metadata[model_name] = add_usage([m
+[31m-                self.usage_metadata[model_name], usage_metadata[m
+[31m-            )[m
+[31m-            self.record_token_usage(model_name, usage_metadata)[m
+[31m-```[m
+[31m-[m
+[31m-**使用方式**[m
+[31m-```python[m
+[31m-from agentchat.core.callbacks import usage_metadata_callback[m
+[31m-[m
+[31m-# 在模型调用时添加回调[m
+[31m-response = await model.ainvoke([m
+[31m-    messages, [m
+[31m-    config={"callbacks": [usage_metadata_callback]}[m
+[31m-)[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 架构设计原则[m
+[31m-[m
+[31m-### 1. 模块化设计[m
+[31m-[m
+[31m-**设计理念**[m
+[31m-- **单一职责**: 每个组件专注于特定功能[m
+[31m-- **松耦合**: 组件间通过接口交互，降低依赖[m
+[31m-- **高内聚**: 相关功能集中在同一模块中[m
+[31m-[m
+[31m-**实现方式**[m
+[31m-```python[m
+[31m-# 代理专注于对话逻辑[m
+[31m-class ReactAgent:[m
+[31m-    def __init__(self, model, tools):[m
+[31m-        self.model = model      # 模型管理交给 ModelManager[m
+[31m-        self.tools = tools      # 工具管理独立处理[m
+[31m-[m
+[31m-# 模型管理专注于模型创建和配置[m
+[31m-class ModelManager:[m
+[31m-    @classmethod[m
+[31m-    def get_conversation_model(cls):[m
+[31m-        # 统一的模型创建逻辑[m
+[31m-```[m
+[31m-[m
+[31m-### 2. 异步优先[m
+[31m-[m
+[31m-**设计理念**[m
+[31m-- **非阻塞**: 所有 I/O 操作都采用异步方式[m
+[31m-- **并发处理**: 支持高并发的请求处理[m
+[31m-- **资源效率**: 最大化系统资源利用率[m
+[31m-[m
+[31m-**实现示例**[m
+[31m-```python[m
+[31m-# 异步代理调用[m
+[31m-async def astream(self, messages: List[BaseMessage]):[m
+[31m-    async for output in self.graph.astream(input, stream_mode=["messages", "custom"]):[m
+[31m-        yield output[m
+[31m-[m
+[31m-# 异步工具执行[m
+[31m-async def _execute_tool(self, message: AIMessage):[m
+[31m-    tasks = [tool.ainvoke(args) for tool in tools][m
+[31m-    results = await asyncio.gather(*tasks)[m
+[31m-```[m
+[31m-[m
+[31m-### 3. 流式处理[m
+[31m-[m
+[31m-**设计理念**[m
+[31m-- **实时响应**: 提供实时的用户反馈[m
+[31m-- **内存效率**: 避免大量数据的内存占用[m
+[31m-- **用户体验**: 改善长时间任务的用户体验[m
+[31m-[m
+[31m-**流式架构**[m
+[31m-```python[m
+[31m-# 统一的流式输出格式[m
+[31m-class StreamOutput(TypedDict):[m
+[31m-    type: str           # 输出类型[m
+[31m-    timestamp: float    # 时间戳[m
+[31m-    data: Dict[str, Any]  # 数据内容[m
+[31m-[m
+[31m-# 流式事件发送[m
+[31m-async def emit_event(self, event):[m
+[31m-    writer = get_stream_writer()[m
+[31m-    writer(self._wrap_stream_output("event", event))[m
+[31m-```[m
+[31m-[m
+[31m-### 4. 可扩展性[m
+[31m-[m
+[31m-**设计理念**[m
+[31m-- **插件架构**: 支持动态加载新的工具和服务[m
+[31m-- **协议支持**: 支持标准协议（如 MCP）[m
+[31m-- **配置驱动**: 通过配置文件控制系统行为[m
+[31m-[m
+[31m-**扩展机制**[m
+[31m-```python[m
+[31m-# 动态工具加载[m
+[31m-async def setup_mcp_tools(self):[m
+[31m-    mcp_tools = await self.mcp_manager.get_mcp_tools()[m
+[31m-    self.tools.extend(mcp_tools)[m
+[31m-[m
+[31m-# 中间件系统[m
+[31m-@wrap_tool_call[m
+[31m-async def custom_middleware(request, handler):[m
+[31m-    # 自定义处理逻辑[m
+[31m-    return await handler(request)[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 最佳实践指南[m
+[31m-[m
+[31m-### 1. 代理选择指南[m
+[31m-[m
+[31m-**ReactAgent 适用场景**[m
+[31m-- 通用对话任务[m
+[31m-- 需要工具调用的场景[m
+[31m-- 实时交互需求[m
+[31m-- 流式输出需求[m
+[31m-[m
+[31m-**CodeActAgent 适用场景**[m
+[31m-- 代码生成和执行[m
+[31m-- 数据分析任务[m
+[31m-- 计算密集型任务[m
+[31m-- 需要代码调试的场景[m
+[31m-[m
+[31m-**PlanExecuteAgent 适用场景**[m
+[31m-- 复杂多步骤任务[m
+[31m-- 需要战略规划的场景[m
+[31m-- 工具编排需求[m
+[31m-- 长时间运行的任务[m
+[31m-[m
+[31m-### 2. 模型配置最佳实践[m
+[31m-[m
+[31m-**模型选择原则**[m
+[31m-```python[m
+[31m-# 根据任务类型选择合适的模型[m
+[31m-conversation_model = ModelManager.get_conversation_model()  # 一般对话[m
+[31m-tool_call_model = ModelManager.get_tool_invocation_model()  # 工具调用[m
+[31m-reasoning_model = ModelManager.get_reasoning_model()        # 复杂推理[m
+[31m-```[m
+[31m-[m
+[31m-**性能优化**[m
+[31m-```python[m
+[31m-# 使用流式处理提高响应速度[m
+[31m-async for chunk in model.astream(messages):[m
+[31m-    yield chunk[m
+[31m-[m
+[31m-# 批量处理提高效率[m
+[31m-embeddings = await embedding_model.embed_async(text_list)[m
+[31m-```[m
+[31m-[m
+[31m-### 3. 错误处理策略[m
+[31m-[m
+[31m-**分层错误处理**[m
+[31m-```python[m
+[31m-try:[m
+[31m-    # 代理级别错误处理[m
+[31m-    result = await agent.ainvoke(messages)[m
+[31m-except AgentError as e:[m
+[31m-    # 代理特定错误[m
+[31m-    logger.error(f"Agent error: {e}")[m
+[31m-except ModelError as e:[m
+[31m-    # 模型相关错误[m
+[31m-    logger.error(f"Model error: {e}")[m
+[31m-except Exception as e:[m
+[31m-    # 通用错误处理[m
+[31m-    logger.error(f"Unexpected error: {e}")[m
+[31m-```[m
+[31m-[m
+[31m-**自动恢复机制**[m
+[31m-```python[m
+[31m-# JSON 解析错误自动修复[m
+[31m-try:[m
+[31m-    content = json.loads(response.content)[m
+[31m-except Exception as err:[m
+[31m-    fix_message = FIX_JSON_PROMPT.format([m
+[31m-        json_content=response.content, [m
+[31m-        json_error=str(err)[m
+[31m-    )[m
+[31m-    fix_response = await model.ainvoke([fix_message])[m
+[31m-    content = json.loads(fix_response.content)[m
+[31m-```[m
+[31m-[m
+[31m-### 4. 监控和调试[m
+[31m-[m
+[31m-**使用统计监控**[m
+[31m-```python[m
+[31m-# 启用使用统计回调[m
+[31m-config = {"callbacks": [usage_metadata_callback]}[m
+[31m-response = await model.ainvoke(messages, config=config)[m
+[31m-```[m
+[31m-[m
+[31m-**日志记录**[m
+[31m-```python[m
+[31m-# 结构化日志记录[m
+[31m-logger.info(f"Tool {tool_name} executed", extra={[m
+[31m-    "tool_name": tool_name,[m
+[31m-    "args": tool_args,[m
+[31m-    "result": tool_result,[m
+[31m-    "user_id": user_id[m
+[31m-})[m
+[31m-```[m
+[31m-[m
+[31m-### 5. 安全考虑[m
+[31m-[m
+[31m-**代码执行安全**[m
+[31m-```python[m
+[31m-# 使用沙箱环境执行代码[m
+[31m-sandbox = PyodideSandbox(allow_net=True)[m
+[31m-result = await sandbox.execute(code)[m
+[31m-```[m
+[31m-[m
+[31m-**输入验证**[m
+[31m-```python[m
+[31m-# 验证用户输入[m
+[31m-if not messages or not isinstance(messages[-1], BaseMessage):[m
+[31m-    raise ValueError("Invalid message format")[m
+[31m-```[m
+[31m-[m
+[31m-**权限控制**[m
+[31m-```python[m
+[31m-# 基于用户的权限控制[m
+[31m-mcp_config = await MCPUserConfigService.get_mcp_user_config([m
+[31m-    user_id, mcp_server_id[m
+[31m-)[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 总结[m
+[31m-[m
+[31m-AgentChat 核心架构通过模块化设计、异步优先、流式处理和可扩展性等设计原则，构建了一个功能强大、性能优异的智能对话系统基础框架。[m
+[31m-[m
+[31m-**核心优势**[m
+[31m-1. **多样化代理**: 提供多种专用代理满足不同需求[m
+[31m-2. **统一模型管理**: 简化模型配置和使用[m
+[31m-3. **完善监控**: 全面的使用统计和错误追踪[m
+[31m-4. **高性能**: 异步处理和流式输出保证系统性能[m
+[31m-5. **易扩展**: 插件架构和协议支持便于系统扩展[m
+[31m-[m
+[31m-**适用场景**[m
+[31m-- 企业级智能客服系统[m
+[31m-- 代码生成和分析平台[m
+[31m-- 复杂任务自动化系统[m
+[31m-- 多模态智能应用[m
+[31m-- 大规模对话服务[m
+[31m-[m
+[31m-通过合理使用这些核心组件，开发者可以快速构建出功能丰富、性能优异的智能对话应用。建议根据具体需求选择合适的代理类型，并遵循最佳实践以获得最佳效果。[m
+\ No newline at end of file[m
+[1mdiff --git a/docs/reference/database.md b/docs/reference/database.md[m
+[1mdeleted file mode 100644[m
+[1mindex 98d45d8..0000000[m
+[1m--- a/docs/reference/database.md[m
+[1m+++ /dev/null[m
+[36m@@ -1,358 +0,0 @@[m
+[31m-# 数据库表结构技术文档[m
+[31m-[m
+[31m-## 概述[m
+[31m-[m
+[31m-本文档详细描述了 AgentChat 系统的数据库表结构设计。系统采用 MySQL 数据库，使用 SQLModel 作为 ORM 框架，支持用户管理、智能体配置、对话管理、知识库管理等核心功能。[m
+[31m-[m
+[31m-## 数据库配置[m
+[31m-[m
+[31m-- **数据库名称**: `agentchat`[m
+[31m-- **默认用户**: `agentchat_user`[m
+[31m-- **连接地址**: `mysql://agentchat_user:123456@mysql:3306/agentchat`[m
+[31m-[m
+[31m-## 表结构详细说明[m
+[31m-[m
+[31m-### 1. 用户管理相关表[m
+[31m-[m
+[31m-#### 1.1 用户表 (user)[m
+[31m-[m
+[31m-存储系统用户的基本信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| user_id | VARCHAR | PRIMARY KEY | 用户唯一标识 |[m
+[31m-| user_name | VARCHAR | UNIQUE, INDEX | 用户名 |[m
+[31m-| user_email | VARCHAR | | 用户邮箱 |[m
+[31m-| user_avatar | VARCHAR | | 用户头像URL |[m
+[31m-| user_description | VARCHAR | DEFAULT: "该用户很懒，没有留下一片云彩" | 用户描述 |[m
+[31m-| user_password | VARCHAR | | 加密后的用户密码 |[m
+[31m-| delete | BOOLEAN | DEFAULT: FALSE | 是否删除标记 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-**特殊用户类型**:[m
+[31m-- SystemUser = '0' (系统用户)[m
+[31m-- AdminUser = '1' (管理员用户)[m
+[31m-[m
+[31m-#### 1.2 角色表 (role)[m
+[31m-[m
+[31m-定义系统中的用户角色。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | INT | PRIMARY KEY, AUTO_INCREMENT | 角色ID |[m
+[31m-| role_name | VARCHAR | UNIQUE | 角色名称 |[m
+[31m-| remark | VARCHAR | | 角色备注 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-**预定义角色**:[m
+[31m-- SystemRole = '0' (系统管理员)[m
+[31m-- AdminRole = '1' (超级管理员)[m
+[31m-- DefaultRole = '2' (普通用户)[m
+[31m-[m
+[31m-#### 1.3 用户角色关联表 (user_role)[m
+[31m-[m
+[31m-管理用户与角色的多对多关系。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 关联记录ID |[m
+[31m-| user_id | VARCHAR | INDEX | 用户ID |[m
+[31m-| role_id | VARCHAR | INDEX | 角色ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 2. 智能体管理相关表[m
+[31m-[m
+[31m-#### 2.1 智能体表 (agent)[m
+[31m-[m
+[31m-存储智能体的配置信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 智能体ID (UUID) |[m
+[31m-| name | VARCHAR | | 智能体名称 |[m
+[31m-| description | VARCHAR | | 智能体描述 |[m
+[31m-| logo_url | VARCHAR | | 智能体Logo URL |[m
+[31m-| user_id | VARCHAR | INDEX | 创建用户ID |[m
+[31m-| is_custom | BOOLEAN | DEFAULT: TRUE | 是否为用户自定义 |[m
+[31m-| system_prompt | TEXT | | 系统提示词 |[m
+[31m-| llm_id | VARCHAR | | 绑定的LLM模型ID |[m
+[31m-| enable_memory | BOOLEAN | DEFAULT: TRUE | 是否开启记忆功能 |[m
+[31m-| mcp_ids | JSON | | 绑定的MCP Server ID列表 |[m
+[31m-| tool_ids | JSON | | 绑定的工具ID列表 |[m
+[31m-| knowledge_ids | JSON | | 绑定的知识库ID列表 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 2.2 MCP智能体表 (mcp_agent)[m
+[31m-[m
+[31m-专门用于MCP (Model Context Protocol) 智能体的配置。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| mcp_agent_id | VARCHAR | PRIMARY KEY | MCP智能体ID |[m
+[31m-| mcp_server_id | JSON | | 绑定的MCP Server ID |[m
+[31m-| name | VARCHAR | | MCP智能体名称 |[m
+[31m-| description | VARCHAR | | 描述信息 |[m
+[31m-| logo_url | VARCHAR | DEFAULT: 'img/mcp_openai/mcp_agent.png' | Logo URL |[m
+[31m-| user_id | VARCHAR | INDEX | 创建用户ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 3. 对话管理相关表[m
+[31m-[m
+[31m-#### 3.1 对话表 (dialog)[m
+[31m-[m
+[31m-存储用户与智能体的对话会话信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| dialog_id | VARCHAR | PRIMARY KEY | 对话ID (UUID) |[m
+[31m-| name | VARCHAR | | 对话名称 |[m
+[31m-| agent_id | VARCHAR | | 绑定的智能体ID |[m
+[31m-| agent_type | VARCHAR | DEFAULT: "Agent" | 智能体类型 (Agent/MCPAgent) |[m
+[31m-| user_id | VARCHAR | | 用户ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 3.2 历史消息表 (history)[m
+[31m-[m
+[31m-存储对话中的具体消息内容。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 消息ID (UUID) |[m
+[31m-| content | TEXT | | 消息内容 |[m
+[31m-| dialog_id | VARCHAR | | 所属对话ID |[m
+[31m-| role | VARCHAR | | 消息角色 (assistant/system/user) |[m
+[31m-| events | JSON | | AI回复事件信息 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 3.3 工作台会话表 (workspace_session)[m
+[31m-[m
+[31m-管理工作台的会话信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| session_id | VARCHAR | PRIMARY KEY | 会话ID (UUID) |[m
+[31m-| title | VARCHAR | | 会话标题 |[m
+[31m-| agent | VARCHAR | | 使用的智能体 |[m
+[31m-| user_id | VARCHAR | | 用户ID |[m
+[31m-| contexts | JSON | | 结构化对话上下文 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 4. 消息反馈相关表[m
+[31m-[m
+[31m-#### 4.1 消息点赞表 (message_like)[m
+[31m-[m
+[31m-存储用户对消息的点赞记录。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 记录ID (UUID) |[m
+[31m-| user_input | TEXT | | 用户输入内容 |[m
+[31m-| agent_output | TEXT | | 智能体输出内容 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 4.2 消息踩表 (message_down)[m
+[31m-[m
+[31m-存储用户对消息的踩记录。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 记录ID (UUID) |[m
+[31m-| user_input | TEXT | | 用户输入内容 |[m
+[31m-| agent_output | TEXT | | 智能体输出内容 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 5. 知识库管理相关表[m
+[31m-[m
+[31m-#### 5.1 知识库表 (knowledge)[m
+[31m-[m
+[31m-存储知识库的基本信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 知识库ID (格式: t_xxxxxxxxxxxxxxxx) |[m
+[31m-| name | VARCHAR(128) | UNIQUE, INDEX | 知识库名称 |[m
+[31m-| description | VARCHAR(1024) | | 知识库描述 |[m
+[31m-| user_id | VARCHAR(128) | INDEX | 创建用户ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 5.2 知识库文件表 (knowledge_file)[m
+[31m-[m
+[31m-存储知识库中的文件信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 文件ID (UUID) |[m
+[31m-| file_name | VARCHAR | INDEX | 文件名称 |[m
+[31m-| knowledge_id | VARCHAR | INDEX | 所属知识库ID |[m
+[31m-| status | VARCHAR | DEFAULT: "success" | 文件解析状态 (fail/process/success) |[m
+[31m-| user_id | VARCHAR | INDEX | 用户ID |[m
+[31m-| oss_url | VARCHAR | | OSS存储路径 |[m
+[31m-| file_size | INT | DEFAULT: 0 | 文件大小(字节) |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 6. 模型管理相关表[m
+[31m-[m
+[31m-#### 6.1 大语言模型表 (llm)[m
+[31m-[m
+[31m-存储大语言模型的配置信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| llm_id | VARCHAR | PRIMARY KEY | 模型ID (UUID) |[m
+[31m-| llm_type | VARCHAR | DEFAULT: 'LLM' | 模型类型 (LLM/Embedding/Rerank) |[m
+[31m-| model | VARCHAR | | 模型名称 |[m
+[31m-| base_url | VARCHAR | | 模型API地址 |[m
+[31m-| api_key | VARCHAR | | API密钥 |[m
+[31m-| provider | VARCHAR | | 模型提供商 |[m
+[31m-| user_id | VARCHAR | | 创建用户ID |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 7. 工具管理相关表[m
+[31m-[m
+[31m-#### 7.1 工具表 (tool)[m
+[31m-[m
+[31m-存储系统中可用的工具信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| tool_id | VARCHAR | PRIMARY KEY | 工具ID (UUID) |[m
+[31m-| zh_name | VARCHAR | | 工具中文名称 |[m
+[31m-| en_name | VARCHAR | | 工具英文名称 |[m
+[31m-| user_id | VARCHAR | | 创建用户ID |[m
+[31m-| logo_url | VARCHAR | | 工具Logo URL |[m
+[31m-| description | TEXT | | 工具描述 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 8. MCP服务器管理相关表[m
+[31m-[m
+[31m-#### 8.1 MCP服务器表 (mcp_server)[m
+[31m-[m
+[31m-存储MCP服务器的配置信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| mcp_server_id | VARCHAR | PRIMARY KEY | MCP服务器ID (UUID) |[m
+[31m-| server_name | VARCHAR | | 服务器名称 |[m
+[31m-| user_id | VARCHAR | | 创建用户ID |[m
+[31m-| user_name | VARCHAR | | 创建用户名称 |[m
+[31m-| description | VARCHAR | | 服务器描述 |[m
+[31m-| mcp_as_tool_name | VARCHAR | | 作为工具时的名称 |[m
+[31m-| url | VARCHAR | | 连接地址 |[m
+[31m-| type | VARCHAR(255) | | 连接类型 (sse/websocket/stdio) |[m
+[31m-| logo_url | VARCHAR | | Logo URL |[m
+[31m-| config | JSON | | 配置信息 |[m
+[31m-| tools | JSON | | 工具列表 |[m
+[31m-| params | JSON | | 输入参数 |[m
+[31m-| config_enabled | BOOLEAN | DEFAULT: FALSE | 是否需要用户配置 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-#### 8.2 MCP Stdio服务器表 (mcp_stdio_server)[m
+[31m-[m
+[31m-存储MCP Stdio服务器的特殊配置。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| mcp_server_id | VARCHAR | PRIMARY KEY | 服务器ID (UUID) |[m
+[31m-| mcp_server_path | VARCHAR | | 脚本路径 |[m
+[31m-| mcp_server_command | VARCHAR | | 执行命令 |[m
+[31m-| mcp_server_env | VARCHAR | | 环境变量 |[m
+[31m-| user_id | VARCHAR | | 创建用户ID |[m
+[31m-| name | VARCHAR | DEFAULT: "MCP Server" | 服务器名称 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-[m
+[31m-#### 8.3 MCP用户配置表 (mcp_user_config)[m
+[31m-[m
+[31m-存储用户与MCP服务器的绑定配置。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 配置ID (UUID) |[m
+[31m-| mcp_server_id | VARCHAR | | MCP服务器ID |[m
+[31m-| user_id | VARCHAR | | 用户ID |[m
+[31m-| config | JSON | | 鉴权配置信息 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| update_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-### 9. 统计和记录相关表[m
+[31m-[m
+[31m-#### 9.1 使用统计表 (usage_stats)[m
+[31m-[m
+[31m-记录智能体和模型的使用统计信息。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 统计记录ID (UUID) |[m
+[31m-| agent | VARCHAR | | 智能体名称 |[m
+[31m-| model | VARCHAR | | 模型名称 |[m
+[31m-| user_id | VARCHAR | | 用户ID |[m
+[31m-| input_tokens | INT | DEFAULT: 0 | 输入Token数量 |[m
+[31m-| output_tokens | INT | DEFAULT: 0 | 输出Token数量 |[m
+[31m-| create_time | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-[m
+[31m-#### 9.2 记忆历史表 (memory_history)[m
+[31m-[m
+[31m-记录智能体记忆的变更历史。[m
+[31m-[m
+[31m-| 字段名 | 类型 | 约束 | 描述 |[m
+[31m-|--------|------|------|------|[m
+[31m-| id | VARCHAR | PRIMARY KEY | 记录ID (UUID) |[m
+[31m-| memory_id | VARCHAR | | 记忆ID |[m
+[31m-| old_memory | TEXT | | 旧记忆内容 |[m
+[31m-| new_memory | TEXT | | 新记忆内容 |[m
+[31m-| event | VARCHAR | | 事件类型 |[m
+[31m-| actor_id | VARCHAR | | 操作者ID |[m
+[31m-| role | VARCHAR | | 角色 |[m
+[31m-| is_deleted | BOOLEAN | DEFAULT: FALSE | 是否删除 |[m
+[31m-| created_at | DATETIME | DEFAULT: CURRENT_TIMESTAMP | 创建时间 |[m
+[31m-| updated_at | DATETIME | DEFAULT: CURRENT_TIMESTAMP ON UPDATE | 更新时间 |[m
+[31m-[m
+[31m-## 数据库设计特点[m
+[31m-[m
+[31m-### 1. 统一的基础模型[m
+[31m-所有表都继承自 `SQLModelSerializable` 基类，提供统一的序列化和时间戳管理功能。[m
+[31m-[m
+[31m-### 2. UUID主键策略[m
+[31m-大部分表使用UUID作为主键，确保分布式环境下的唯一性。[m
+[31m-[m
+[31m-### 3. 软删除支持[m
+[31m-部分表支持软删除机制，通过 `delete` 或 `is_deleted` 字段标记。[m
+[31m-[m
+[31m-### 4. JSON字段使用[m
+[31m-广泛使用JSON字段存储复杂的配置信息和列表数据，提高灵活性。[m
+[31m-[m
+[31m-### 5. 时间戳自动管理[m
+[31m-所有表都包含 `create_time` 和 `update_time` 字段，由数据库自动维护。[m
+[31m-[m
+[31m-## 索引策略[m
+[31m-[m
+[31m-- 用户相关字段 (`user_id`) 建立索引[m
+[31m-- 关联字段 (`dialog_id`, `knowledge_id` 等) 建立索引[m
+[31m-- 唯一性约束字段 (`user_name`, `knowledge.name`) 建立唯一索引[m
+[31m-[m
+[31m-## 数据完整性[m
+[31m-[m
+[31m-- 外键关系通过应用层维护[m
+[31m-- 必填字段使用 NOT NULL 约束[m
+[31m-- 枚举值通过应用层验证[m
+[31m-- 字符串长度限制防止数据溢出[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-*文档版本: 1.0*  [m
+[31m-*最后更新: 2024年11月*  [m
+[31m-*维护者: AgentChat 开发团队*[m
+\ No newline at end of file[m
+[1mdiff --git a/docs/reference/migration.md b/docs/reference/migration.md[m
+[1mdeleted file mode 100644[m
+[1mindex ad4dcbe..0000000[m
+[1m--- a/docs/reference/migration.md[m
+[1m+++ /dev/null[m
+[36m@@ -1,746 +0,0 @@[m
+[31m-# AgentChat v2.2.0 迁移指南[m
+[31m-[m
+[31m-> **从 LangChain 0.x 升级到 LangChain 1.0+ 的完整迁移指南**[m
+[31m-[m
+[31m-## 📋 概述[m
+[31m-[m
+[31m-AgentChat v2.2.0 是一个重大版本更新，主要变更是将 LangChain 从 0.x 版本升级到 1.0+ 版本。LangChain 1.0 引入了**革命性的架构变更**：[m
+[31m-[m
+[31m-- 🔄 **全新的 Agent 系统**: 从 `initialize_agent` 完全迁移到 `create_agent`[m
+[31m-- 🛠️ **工具系统重构**: 使用 `@tool` 装饰器和新的工具定义方式[m
+[31m-- 🎯 **中间件架构**: 全新的中间件系统替代旧的回调机制[m
+[31m-- 📊 **状态管理**: 基于 TypedDict 的状态系统[m
+[31m-- 🌊 **流式处理**: 原生支持流式响应和实时交互[m
+[31m-[m
+[31m-## 🚨 重要提醒[m
+[31m-[m
+[31m-- **完全重写**: 这不是简单的版本升级，而是架构的完全重写[m
+[31m-- **备份数据**: 升级前请务必备份您的数据库和配置文件[m
+[31m-- **测试环境**: 强烈建议先在测试环境中进行完整验证[m
+[31m-- **依赖冲突**: LangChain 1.0 对依赖包有严格要求[m
+[31m-- **学习成本**: 新架构需要重新学习 Agent 开发模式[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 📦 版本对比[m
+[31m-[m
+[31m-| 组件 |     v2.1.x 及以下     |    v2.2.0+     | 说明 |[m
+[31m-|:---:|:------------------:|:--------------:|:---|[m
+[31m-| **LangChain** |        0.x         |     1.0.3+     | 核心框架完全重写 |[m
+[31m-| **LangChain Community** |        0.x         |     0.4.1+     | 社区组件包 |[m
+[31m-| **LangChain OpenAI** |        0.x         |     1.0.2+     | OpenAI 集成包 |[m
+[31m-| **LangGraph** |         -          |     1.0.2+     | 图形化 Agent 编排（核心） |[m
+[31m-| **Agent 架构** | `initialize_agent` | `create_agent` | 完全不同的实现方式 |[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 🔄 主要变更内容[m
+[31m-[m
+[31m-### 1. **包结构重组**[m
+[31m-[m
+[31m-#### 变更前 (LangChain 0.x)[m
+[31m-```python[m
+[31m-from langchain.llms import OpenAI[m
+[31m-from langchain.chat_models import ChatOpenAI[m
+[31m-from langchain.embeddings import OpenAIEmbeddings[m
+[31m-from langchain.vectorstores import Chroma[m
+[31m-from langchain.agents import initialize_agent, AgentType[m
+[31m-from langchain.tools import Tool[m
+[31m-from langchain.memory import ConversationBufferMemory[m
+[31m-from langchain.schema import HumanMessage, AIMessage[m
+[31m-from langchain.callbacks.base import BaseCallbackHandler[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后 (LangChain 1.0+)[m
+[31m-```python[m
+[31m-from langchain_openai import ChatOpenAI, OpenAIEmbeddings[m
+[31m-from langchain_community.vectorstores import Chroma[m
+[31m-from langchain_core.tools import BaseTool, tool[m
+[31m-from langchain_core.messages import BaseMessage, AIMessage, HumanMessage[m
+[31m-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder[m
+[31m-from langchain_core.callbacks import BaseCallbackHandler[m
+[31m-from langchain.agents import create_agent  # 新的核心函数[m
+[31m-from langchain.agents.middleware import wrap_tool_call, after_model[m
+[31m-```[m
+[31m-[m
+[31m-### 2. **Agent 架构革命性变更 - 从 initialize_agent 到 create_agent**[m
+[31m-[m
+[31m-#### 变更前 (LangChain 0.x)[m
+[31m-```python[m
+[31m-from langchain.agents import initialize_agent, AgentType[m
+[31m-from langchain.memory import ConversationBufferMemory[m
+[31m-[m
+[31m-# 旧的 Agent 初始化方式[m
+[31m-memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)[m
+[31m-agent = initialize_agent([m
+[31m-    tools=tools,[m
+[31m-    llm=llm,[m
+[31m-    agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,[m
+[31m-    memory=memory,[m
+[31m-    verbose=True[m
+[31m-)[m
+[31m-[m
+[31m-# 运行 Agent[m
+[31m-result = agent.run("Hello, what can you do?")[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后 (LangChain 1.0+ 官方推荐)[m
+[31m-```python[m
+[31m-from langchain.agents import create_agent[m
+[31m-from langchain_core.messages import HumanMessage[m
+[31m-[m
+[31m-# 方式1: 使用模型标识符字符串 (最简单)[m
+[31m-agent = create_agent("gpt-4o", tools=tools)[m
+[31m-[m
+[31m-# 方式2: 使用模型实例 (更多控制)[m
+[31m-from langchain_openai import ChatOpenAI[m
+[31m-model = ChatOpenAI(model="gpt-4o", temperature=0.1, max_tokens=1000)[m
+[31m-agent = create_agent(model, tools=tools)[m
+[31m-[m
+[31m-# 方式3: 添加系统提示[m
+[31m-agent = create_agent([m
+[31m-    model="gpt-4o",[m
+[31m-    tools=tools,[m
+[31m-    system_prompt="You are a helpful assistant. Be concise and accurate."[m
+[31m-)[m
+[31m-[m
+[31m-# 运行 Agent (新的调用方式)[m
+[31m-result = agent.invoke({[m
+[31m-    "messages": [{"role": "user", "content": "Hello, what can you do?"}][m
+[31m-})[m
+[31m-[m
+[31m-# 流式调用[m
+[31m-for chunk in agent.stream({[m
+[31m-    "messages": [{"role": "user", "content": "Search for AI news"}][m
+[31m-}):[m
+[31m-    print(chunk)[m
+[31m-```[m
+[31m-[m
+[31m-### 3. **工具系统完全重构**[m
+[31m-[m
+[31m-#### 变更前 (LangChain 0.x)[m
+[31m-```python[m
+[31m-from langchain.tools import Tool[m
+[31m-[m
+[31m-def search_function(query: str) -> str:[m
+[31m-    return f"Search results for: {query}"[m
+[31m-[m
+[31m-# 简单工具定义[m
+[31m-tool = Tool([m
+[31m-    name="Search",[m
+[31m-    description="Search for information",[m
+[31m-    func=search_function[m
+[31m-)[m
+[31m-[m
+[31m-# 使用工具[m
+[31m-tools = [tool][m
+[31m-agent = initialize_agent(tools=tools, llm=llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION)[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后 (LangChain 1.0+ 官方推荐)[m
+[31m-```python[m
+[31m-from langchain_core.tools import tool[m
+[31m-from typing import Annotated[m
+[31m-[m
+[31m-# 方式1: 使用 @tool 装饰器 (官方推荐)[m
+[31m-@tool[m
+[31m-def search(query: Annotated[str, "The search query"]) -> str:[m
+[31m-    """Search for information on the internet."""[m
+[31m-    return f"Search results for: {query}"[m
+[31m-[m
+[31m-@tool[m
+[31m-def get_weather(location: Annotated[str, "The location to get weather for"]) -> str:[m
+[31m-    """Get weather information for a location."""[m
+[31m-    return f"Weather in {location}: Sunny, 72°F"[m
+[31m-[m
+[31m-# 使用工具 - 新的 create_agent 方式[m
+[31m-from langchain.agents import create_agent[m
+[31m-[m
+[31m-agent = create_agent("gpt-4o", tools=[search, get_weather])[m
+[31m-[m
+[31m-# 方式2: 继承 BaseTool (高级用法)[m
+[31m-from langchain_core.tools import BaseTool[m
+[31m-from pydantic import BaseModel, Field[m
+[31m-[m
+[31m-class SearchInput(BaseModel):[m
+[31m-    query: str = Field(description="The search query")[m
+[31m-[m
+[31m-class SearchTool(BaseTool):[m
+[31m-    name: str = "search"[m
+[31m-    description: str = "Search for information"[m
+[31m-    args_schema: type[BaseModel] = SearchInput[m
+[31m-[m
+[31m-    def _run(self, query: str) -> str:[m
+[31m-        return f"Search results for: {query}"[m
+[31m-[m
+[31m-    async def _arun(self, query: str) -> str:[m
+[31m-        return f"Async search results for: {query}"[m
+[31m-```[m
+[31m-[m
+[31m-### 4. **中间件系统 - 全新的扩展机制**[m
+[31m-[m
+[31m-#### 新增功能 (LangChain 1.0+)[m
+[31m-LangChain 1.0 引入了强大的中间件系统，替代了旧的回调机制：[m
+[31m-[m
+[31m-```python[m
+[31m-from langchain.agents import create_agent[m
+[31m-from langchain.agents.middleware import wrap_tool_call, after_model, wrap_model_call[m
+[31m-from langchain_core.messages import ToolMessage[m
+[31m-[m
+[31m-# 工具调用中间件 - 处理工具执行[m
+[31m-@wrap_tool_call[m
+[31m-def handle_tool_errors(request, handler):[m
+[31m-    """处理工具执行错误"""[m
+[31m-    try:[m
+[31m-        return handler(request)[m
+[31m-    except Exception as e:[m
+[31m-        return ToolMessage([m
+[31m-            content=f"Tool error: {str(e)}",[m
+[31m-            tool_call_id=request.tool_call["id"][m
+[31m-        )[m
+[31m-[m
+[31m-# 模型后处理中间件[m
+[31m-@after_model[m
+[31m-def log_model_response(state, runtime):[m
+[31m-    """记录模型响应"""[m
+[31m-    last_message = state["messages"][-1][m
+[31m-    print(f"Model response: {last_message.content}")[m
+[31m-    return None[m
+[31m-[m
+[31m-# 动态模型选择中间件[m
+[31m-@wrap_model_call[m
+[31m-def dynamic_model_selection(request, handler):[m
+[31m-    """基于对话复杂度选择模型"""[m
+[31m-    message_count = len(request.state["messages"])[m
+[31m-    if message_count > 10:[m
+[31m-        # 长对话使用高级模型[m
+[31m-        from langchain_openai import ChatOpenAI[m
+[31m-        advanced_model = ChatOpenAI(model="gpt-4o")[m
+[31m-        return handler(request.override(model=advanced_model))[m
+[31m-    return handler(request)[m
+[31m-[m
+[31m-# 创建带中间件的 Agent[m
+[31m-agent = create_agent([m
+[31m-    model="gpt-4o-mini",[m
+[31m-    tools=[search, get_weather],[m
+[31m-    middleware=[handle_tool_errors, log_model_response, dynamic_model_selection][m
+[31m-)[m
+[31m-```[m
+[31m-[m
+[31m-### 5. **结构化输出 - 新的响应格式控制**[m
+[31m-[m
+[31m-#### 新增功能 (LangChain 1.0+)[m
+[31m-```python[m
+[31m-from pydantic import BaseModel[m
+[31m-from langchain.agents import create_agent[m
+[31m-from langchain.agents.structured_output import ToolStrategy, ProviderStrategy[m
+[31m-[m
+[31m-class ContactInfo(BaseModel):[m
+[31m-    name: str[m
+[31m-    email: str[m
+[31m-    phone: str[m
+[31m-[m
+[31m-# 方式1: 使用 ToolStrategy (兼容所有支持工具调用的模型)[m
+[31m-agent = create_agent([m
+[31m-    model="gpt-4o-mini",[m
+[31m-    tools=[search_tool],[m
+[31m-    response_format=ToolStrategy(ContactInfo)[m
+[31m-)[m
+[31m-[m
+[31m-# 方式2: 使用 ProviderStrategy (仅支持原生结构化输出的模型)[m
+[31m-agent = create_agent([m
+[31m-    model="gpt-4o",[m
+[31m-    response_format=ProviderStrategy(ContactInfo)[m
+[31m-)[m
+[31m-[m
+[31m-result = agent.invoke({[m
+[31m-    "messages": [{"role": "user", "content": "Extract contact info from: John Doe, john@example.com, (555) 123-4567"}][m
+[31m-})[m
+[31m-[m
+[31m-# 访问结构化响应[m
+[31m-contact = result["structured_response"][m
+[31m-# ContactInfo(name='John Doe', email='john@example.com', phone='(555) 123-4567')[m
+[31m-```[m
+[31m-[m
+[31m-### 6. **自定义状态管理 - 扩展 Agent 记忆**[m
+[31m-[m
+[31m-#### 变更前 (LangChain 0.x)[m
+[31m-```python[m
+[31m-from langchain.memory import ConversationBufferMemory[m
+[31m-[m
+[31m-# 简单的内存管理[m
+[31m-memory = ConversationBufferMemory(return_messages=True)[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后 (LangChain 1.0+)[m
+[31m-```python[m
+[31m-from langchain.agents import AgentState, create_agent[m
+[31m-from typing import TypedDict[m
+[31m-[m
+[31m-# 自定义状态 - 必须继承 AgentState 并使用 TypedDict[m
+[31m-class CustomState(AgentState):[m
+[31m-    user_preferences: dict[m
+[31m-    conversation_context: str[m
+[31m-    tool_usage_count: int[m
+[31m-[m
+[31m-# 方式1: 通过 state_schema 参数[m
+[31m-agent = create_agent([m
+[31m-    model="gpt-4o",[m
+[31m-    tools=[search, get_weather],[m
+[31m-    state_schema=CustomState[m
+[31m-)[m
+[31m-[m
+[31m-# 调用时传入自定义状态[m
+[31m-result = agent.invoke({[m
+[31m-    "messages": [{"role": "user", "content": "I prefer technical explanations"}],[m
+[31m-    "user_preferences": {"style": "technical", "verbosity": "detailed"},[m
+[31m-    "conversation_context": "software development discussion",[m
+[31m-    "tool_usage_count": 0[m
+[31m-})[m
+[31m-[m
+[31m-# 方式2: 通过中间件定义状态 (推荐)[m
+[31m-from langchain.agents.middleware import AgentMiddleware[m
+[31m-[m
+[31m-class CustomMiddleware(AgentMiddleware):[m
+[31m-    state_schema = CustomState[m
+[31m-    [m
+[31m-    def before_model(self, state: CustomState, runtime):[m
+[31m-        # 在模型调用前处理状态[m
+[31m-        state["tool_usage_count"] += 1[m
+[31m-        return None[m
+[31m-[m
+[31m-agent = create_agent([m
+[31m-    model="gpt-4o",[m
+[31m-    tools=[search, get_weather],[m
+[31m-    middleware=[CustomMiddleware()][m
+[31m-)[m
+[31m-```[m
+[31m-[m
+[31m-### 7. **流式处理增强**[m
+[31m-[m
+[31m-#### 变更前 (LangChain 0.x)[m
+[31m-```python[m
+[31m-# 简单的同步调用[m
+[31m-result = agent.run("What's the weather like?")[m
+[31m-print(result)[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后 (LangChain 1.0+)[m
+[31m-```python[m
+[31m-# 流式处理 - 显示中间步骤[m
+[31m-for chunk in agent.stream({[m
+[31m-    "messages": [{"role": "user", "content": "Search for AI news and summarize"}][m
+[31m-}, stream_mode="values"):[m
+[31m-    # 每个 chunk 包含该时刻的完整状态[m
+[31m-    latest_message = chunk["messages"][-1][m
+[31m-    if latest_message.content:[m
+[31m-        print(f"Agent: {latest_message.content}")[m
+[31m-    elif latest_message.tool_calls:[m
+[31m-        print(f"Calling tools: {[tc['name'] for tc in latest_message.tool_calls]}")[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 🛠️ AgentChat 特定变更[m
+[31m-[m
+[31m-### 1. **MCP 集成更新**[m
+[31m-[m
+[31m-#### 文件位置[m
+[31m-- `src/backend/agentchat/services/mcp_openai/mcp_langchain.py`[m
+[31m-[m
+[31m-#### 变更前[m
+[31m-```python[m
+[31m-from langchain.tools import Tool[m
+[31m-from pydantic import BaseModel, Field, create_model[m
+[31m-[m
+[31m-def convert_base_tool(tool_name, tool_description, schema: Dict[str, Any]):[m
+[31m-    schema_model = create_model_from_schema(tool_name, schema)[m
+[31m-    return Tool([m
+[31m-        name=tool_name,[m
+[31m-        description=tool_description,[m
+[31m-        func=lambda **kwargs: call_mcp_tool(kwargs),[m
+[31m-        args_schema=schema_model[m
+[31m-    )[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后[m
+[31m-```python[m
+[31m-from langchain_core.tools import BaseTool, tool[m
+[31m-from pydantic import BaseModel, Field, create_model[m
+[31m-from typing import Any, Dict, Type[m
+[31m-[m
+[31m-@tool[m
+[31m-async def mcp_tool_wrapper(tool_name: str, **kwargs) -> str:[m
+[31m-    """MCP工具包装器，支持异步调用"""[m
+[31m-    return await call_mcp_tools([{[m
+[31m-        "server_name": kwargs.get("server_name"),[m
+[31m-        "url": kwargs.get("url"),[m
+[31m-        "type": kwargs.get("type"),[m
+[31m-        "tool_name": tool_name,[m
+[31m-        "tool_args": kwargs[m
+[31m-    }])[m
+[31m-[m
+[31m-class MCPTool(BaseTool):[m
+[31m-    name: str[m
+[31m-    description: str[m
+[31m-    server_config: Dict[str, Any][m
+[31m-    [m
+[31m-    def _run(self, **kwargs) -> str:[m
+[31m-        # 同步工具执行[m
+[31m-        return asyncio.run(self._arun(**kwargs))[m
+[31m-    [m
+[31m-    async def _arun(self, **kwargs) -> str:[m
+[31m-        # 异步工具执行[m
+[31m-        mcp_args = [{[m
+[31m-            "server_name": self.server_config["name"],[m
+[31m-            "url": self.server_config["url"],[m
+[31m-            "type": self.server_config["type"],[m
+[31m-            "tool_name": self.name,[m
+[31m-            "tool_args": kwargs[m
+[31m-        }][m
+[31m-        return await call_mcp_tools(mcp_args)[m
+[31m-```[m
+[31m-[m
+[31m-### 2. **Mars Agent 更新**[m
+[31m-[m
+[31m-#### 文件位置[m
+[31m-- `src/backend/agentchat/services/mars/mars_agent.py`[m
+[31m-[m
+[31m-#### 变更前[m
+[31m-```python[m
+[31m-from langchain.agents import initialize_agent, AgentType[m
+[31m-from langchain.memory import ConversationBufferMemory[m
+[31m-[m
+[31m-class MarsAgent:[m
+[31m-    def __init__(self, mars_config: MarsConfig):[m
+[31m-        self.mars_tools = None[m
+[31m-        self.mars_config = mars_config[m
+[31m-        [m
+[31m-    def setup_agent(self):[m
+[31m-        memory = ConversationBufferMemory(return_messages=True)[m
+[31m-        return initialize_agent([m
+[31m-            tools=self.mars_tools,[m
+[31m-            llm=self.conversation_model,[m
+[31m-            agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,[m
+[31m-            memory=memory,[m
+[31m-            verbose=True[m
+[31m-        )[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后[m
+[31m-```python[m
+[31m-from langchain.agents import create_agent[m
+[31m-from langchain.agents.middleware import wrap_tool_call, after_model[m
+[31m-from langchain_core.messages import BaseMessage, AIMessage, ToolMessage[m
+[31m-[m
+[31m-class MarsAgent:[m
+[31m-    def __init__(self, mars_config: MarsConfig):[m
+[31m-        self.mars_tools = None[m
+[31m-        self.mars_config = mars_config[m
+[31m-        self.mars_output_queue = None[m
+[31m-        self.reasoning_interrupt = None[m
+[31m-[m
+[31m-    async def init_mars_agent(self):[m
+[31m-        self.mars_tools = await self.setup_mars_tools()[m
+[31m-        await self.setup_language_model()[m
+[31m-        self.middlewares = await self.setup_middlewares()[m
+[31m-        self.react_agent = self.setup_react_agent()[m
+[31m-[m
+[31m-    def setup_react_agent(self):[m
+[31m-        return create_agent([m
+[31m-            model=self.conversation_model,[m
+[31m-            tools=self.mars_tools,[m
+[31m-            middleware=self.middlewares,[m
+[31m-            system_prompt="You are a helpful Mars assistant"[m
+[31m-        )[m
+[31m-[m
+[31m-    async def setup_middlewares(self):[m
+[31m-        @after_model[m
+[31m-        async def handler_after_model(state, runtime):[m
+[31m-            last_message = state["messages"][-1][m
+[31m-            if not last_message.tool_calls:[m
+[31m-                await self.mars_output_queue.put(None)[m
+[31m-            return None[m
+[31m-[m
+[31m-        @wrap_tool_call[m
+[31m-        async def handler_tool_call(request, handler):[m
+[31m-            request.tool_call["args"].update({"user_id": self.mars_config.user_id})[m
+[31m-            tool_result = await handler(request)[m
+[31m-            return ToolMessage(content=tool_result, tool_call_id=request.tool_call["id"])[m
+[31m-[m
+[31m-        return [handler_after_model, handler_tool_call][m
+[31m-[m
+[31m-    async def ainvoke_stream(self, messages: List[BaseMessage]):[m
+[31m-        """流式调用Mars Agent"""[m
+[31m-        self.reasoning_interrupt = asyncio.Event()[m
+[31m-        self.mars_output_queue = asyncio.Queue()[m
+[31m-        [m
+[31m-        callback = UsageMetadataCallbackHandler()[m
+[31m-        [m
+[31m-        async for chunk in self.react_agent.astream([m
+[31m-            input={"messages": messages},[m
+[31m-            config={"callbacks": [callback]},[m
+[31m-            stream_mode=["custom"][m
+[31m-        ):[m
+[31m-            await self.mars_output_queue.put(chunk)[m
+[31m-        [m
+[31m-        await self.mars_output_queue.put(None)[m
+[31m-```[m
+[31m-[m
+[31m-### 3. **RAG 系统更新**[m
+[31m-[m
+[31m-#### 文件位置[m
+[31m-- `src/backend/agentchat/services/rag/`[m
+[31m-[m
+[31m-#### 变更前[m
+[31m-```python[m
+[31m-from langchain.vectorstores import Chroma, Milvus[m
+[31m-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings[m
+[31m-from langchain.document_loaders import PyMuPDFLoader[m
+[31m-from langchain.text_splitter import RecursiveCharacterTextSplitter[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后[m
+[31m-```python[m
+[31m-from langchain_community.vectorstores import Chroma, Milvus[m
+[31m-from langchain_openai import OpenAIEmbeddings[m
+[31m-from langchain_community.embeddings import HuggingFaceEmbeddings[m
+[31m-from langchain_community.document_loaders import PyMuPDFLoader[m
+[31m-from langchain_text_splitters import RecursiveCharacterTextSplitter[m
+[31m-```[m
+[31m-[m
+[31m-### 4. **工具系统统一更新**[m
+[31m-[m
+[31m-#### 文件位置[m
+[31m-- `src/backend/agentchat/tools/`[m
+[31m-[m
+[31m-#### 变更前[m
+[31m-```python[m
+[31m-from langchain.tools import Tool[m
+[31m-[m
+[31m-def create_weather_tool():[m
+[31m-    return Tool([m
+[31m-        name="get_weather",[m
+[31m-        description="Get weather information",[m
+[31m-        func=get_weather_data[m
+[31m-    )[m
+[31m-```[m
+[31m-[m
+[31m-#### 变更后[m
+[31m-```python[m
+[31m-from langchain_core.tools import tool[m
+[31m-from typing import Annotated[m
+[31m-[m
+[31m-@tool[m
+[31m-def get_weather([m
+[31m-    location: Annotated[str, "The location to get weather for"],[m
+[31m-    unit: Annotated[str, "Temperature unit (celsius/fahrenheit)"] = "celsius"[m
+[31m-) -> str:[m
+[31m-    """Get current weather information for a specific location."""[m
+[31m-    return get_weather_data(location, unit)[m
+[31m-[m
+[31m-# 或者使用类定义[m
+[31m-from langchain_core.tools import BaseTool[m
+[31m-from pydantic import BaseModel, Field[m
+[31m-[m
+[31m-class WeatherInput(BaseModel):[m
+[31m-    location: str = Field(description="The location to get weather for")[m
+[31m-    unit: str = Field(default="celsius", description="Temperature unit")[m
+[31m-[m
+[31m-class WeatherTool(BaseTool):[m
+[31m-    name: str = "get_weather"[m
+[31m-    description: str = "Get current weather information"[m
+[31m-    args_schema: type[BaseModel] = WeatherInput[m
+[31m-[m
+[31m-    def _run(self, location: str, unit: str = "celsius") -> str:[m
+[31m-        return get_weather_data(location, unit)[m
+[31m-[m
+[31m-    async def _arun(self, location: str, unit: str = "celsius") -> str:[m
+[31m-        return await get_weather_data_async(location, unit)[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 📋 迁移步骤[m
+[31m-[m
+[31m-### 步骤 1: 环境准备[m
+[31m-[m
+[31m-```bash[m
+[31m-# 1. 备份当前环境[m
+[31m-cp requirements.txt requirements.txt.backup[m
+[31m-cp pyproject.toml pyproject.toml.backup[m
+[31m-[m
+[31m-# 2. 创建新的虚拟环境[m
+[31m-python -m venv venv_v2.2.0[m
+[31m-source venv_v2.2.0/bin/activate  # Linux/Mac[m
+[31m-# 或[m
+[31m-venv_v2.2.0\Scripts\activate  # Windows[m
+[31m-[m
+[31m-# 3. 安装新版本依赖[m
+[31m-pip install -r requirements.txt[m
+[31m-```[m
+[31m-[m
+[31m-### 步骤 2: 代码更新[m
+[31m-[m
+[31m-#### 2.1 更新导入语句[m
+[31m-```bash[m
+[31m-# 使用脚本批量替换导入语句[m
+[31m-python scripts/update_imports.py[m
+[31m-```[m
+[31m-[m
+[31m-#### 2.2 更新 Agent 定义[m
+[31m-- 将所有 `initialize_agent` 替换为 `create_agent`[m
+[31m-- 更新工具定义方式[m
+[31m-- 修改 Agent 调用逻辑[m
+[31m-[m
+[31m-#### 2.3 更新回调处理器[m
+[31m-- 将回调处理器迁移到中间件系统[m
+[31m-- 更新使用统计相关代码[m
+[31m-[m
+[31m-### 步骤 3: 配置更新[m
+[31m-[m
+[31m-#### 3.1 更新 config.yaml[m
+[31m-```yaml[m
+[31m-# 新增 LangChain 1.0 相关配置[m
+[31m-langchain:[m
+[31m-  version: "1.0.3"[m
+[31m-  enable_tracing: true[m
+[31m-  [m
+[31m-# 更新模型配置[m
+[31m-models:[m
+[31m-  default_model: "gpt-4o"[m
+[31m-  temperature: 0.7[m
+[31m-```[m
+[31m-[m
+[31m-### 步骤 4: 测试验证[m
+[31m-[m
+[31m-#### 4.1 单元测试[m
+[31m-```bash[m
+[31m-# 运行所有测试[m
+[31m-python -m pytest tests/[m
+[31m-[m
+[31m-# 运行特定模块测试[m
+[31m-python -m pytest tests/test_agents.py[m
+[31m-python -m pytest tests/test_tools.py[m
+[31m-```[m
+[31m-[m
+[31m-#### 4.2 集成测试[m
+[31m-```bash[m
+[31m-# 启动服务[m
+[31m-cd src/backend[m
+[31m-uvicorn agentchat.main:app --port 7860[m
+[31m-[m
+[31m-# 测试 API 接口[m
+[31m-curl -X POST "http://localhost:7860/api/v1/chat" \[m
+[31m-  -H "Content-Type: application/json" \[m
+[31m-  -d '{"dialog_id": "test", "user_input": "Hello"}'[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 🐛 常见问题与解决方案[m
+[31m-[m
+[31m-### 问题 1: 导入错误[m
+[31m-[m
+[31m-**错误信息:**[m
+[31m-```[m
+[31m-ImportError: cannot import name 'initialize_agent' from 'langchain.agents'[m
+[31m-```[m
+[31m-[m
+[31m-**解决方案:**[m
+[31m-```python[m
+[31m-# 替换旧的导入[m
+[31m-# from langchain.agents import initialize_agent[m
+[31m-[m
+[31m-# 使用新的导入[m
+[31m-from langchain.agents import create_agent[m
+[31m-```[m
+[31m-[m
+[31m-### 问题 2: 工具定义错误[m
+[31m-[m
+[31m-**错误信息:**[m
+[31m-```[m
+[31m-TypeError: Tool() missing required argument: 'args_schema'[m
+[31m-```[m
+[31m-[m
+[31m-**解决方案:**[m
+[31m-```python[m
+[31m-from langchain_core.tools import tool[m
+[31m-from typing import Annotated[m
+[31m-[m
+[31m-@tool[m
+[31m-def my_tool(query: Annotated[str, "Input query"]) -> str:[m
+[31m-    """Tool description"""[m
+[31m-    return f"Result for {query}"[m
+[31m-```[m
+[31m-[m
+[31m-### 问题 3: Agent 调用方式错误[m
+[31m-[m
+[31m-**错误信息:**[m
+[31m-```[m
+[31m-AttributeError: 'CompiledGraph' object has no attribute 'run'[m
+[31m-```[m
+[31m-[m
+[31m-**解决方案:**[m
+[31m-```python[m
+[31m-# 旧的调用方式[m
+[31m-# result = agent.run("Hello")[m
+[31m-[m
+[31m-# 新的调用方式[m
+[31m-result = agent.invoke({[m
+[31m-    "messages": [{"role": "user", "content": "Hello"}][m
+[31m-})[m
+[31m-```[m
+[31m-[m
+[31m-[m
+[31m-## 📚 参考资源[m
+[31m-[m
+[31m-### 官方文档[m
+[31m-- [LangChain 1.0 Agents 文档](https://docs.langchain.com/oss/python/langchain/agents)[m
+[31m-- [LangChain 1.0 迁移指南](https://python.langchain.com/docs/versions/migrating_to_langchain_1_0)[m
+[31m-- [LangChain 工具文档](https://docs.langchain.com/oss/python/langchain/tools)[m
+[31m-- [LangChain 中间件文档](https://docs.langchain.com/oss/python/langchain/middleware)[m
+[31m-[m
+[31m-### 社区资源[m
+[31m-- [LangChain GitHub Issues](https://github.com/langchain-ai/langchain/issues)[m
+[31m-- [LangChain Discord 社区](https://discord.gg/langchain)[m
+[31m-[m
+[31m-### AgentChat 相关[m
+[31m-- [AgentChat 技术文档](agentchat.md)[m
+[31m-- [API 文档](api.md)[m
+[31m-- [核心功能文档](core.md)[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 🆘 获取帮助[m
+[31m-[m
+[31m-如果在迁移过程中遇到问题，可以通过以下方式获取帮助：[m
+[31m-[m
+[31m-1. **查看日志**: 检查应用日志中的错误信息[m
+[31m-2. **运行测试**: 使用测试套件验证功能[m
+[31m-3. **提交 Issue**: 在 GitHub 仓库中提交问题[m
+[31m-4. **社区讨论**: 参与社区讨论获取帮助[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## ✅ 迁移检查清单[m
+[31m-[m
+[31m-- [ ] 备份数据和配置文件[m
+[31m-- [ ] 更新 Python 版本到 3.12+[m
+[31m-- [ ] 安装新版本依赖包[m
+[31m-- [ ] 运行导入更新脚本[m
+[31m-- [ ] 运行 Pydantic 兼容性修复脚本[m
+[31m-- [ ] 将 `initialize_agent` 替换为 `create_agent`[m
+[31m-- [ ] 更新工具定义为 `@tool` 装饰器[m
+[31m-- [ ] 将回调处理器迁移到中间件[m
+[31m-- [ ] 更新 Agent 调用方式 (`run` → `invoke`)[m
+[31m-- [ ] 运行单元测试[m
+[31m-- [ ] 运行集成测试[m
+[31m-- [ ] 验证 API 接口功能[m
+[31m-- [ ] 验证前端界面功能[m
+[31m-- [ ] 部署到生产环境[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-*最后更新时间: 2025年10月*[m
+[31m-*基于 LangChain 1.0 官方文档编写*[m
+\ No newline at end of file[m
+[1mdiff --git a/docs/reference/service.md b/docs/reference/service.md[m
+[1mdeleted file mode 100644[m
+[1mindex 67a14c0..0000000[m
+[1m--- a/docs/reference/service.md[m
+[1m+++ /dev/null[m
+[36m@@ -1,445 +0,0 @@[m
+[31m-# AgentChat 服务技术文档[m
+[31m-[m
+[31m-## 概述[m
+[31m-[m
+[31m-AgentChat 是一个功能强大的智能对话系统，提供多种专业化的服务模块。本文档详细介绍了系统中各个服务组件的功能、架构和使用方法，帮助客户深入理解和有效使用这些服务。[m
+[31m-[m
+[31m-## 目录[m
+[31m-[m
+[31m-1. [核心服务](#核心服务)[m
+[31m-2. [智能代理服务](#智能代理服务)[m
+[31m-3. [知识检索服务](#知识检索服务)[m
+[31m-4. [内存管理服务](#内存管理服务)[m
+[31m-5. [工具集成服务](#工具集成服务)[m
+[31m-6. [文档处理服务](#文档处理服务)[m
+[31m-7. [云存储服务](#云存储服务)[m
+[31m-8. [缓存服务](#缓存服务)[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 核心服务[m
+[31m-[m
+[31m-### RAG 处理器 (RagHandler)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-RAG（Retrieval-Augmented Generation）处理器是系统的核心组件，负责智能检索和生成增强功能。[m
+[31m-[m
+[31m-**主要特性**[m
+[31m-- **查询重写**: 自动优化用户查询以提高检索准确性[m
+[31m-- **混合检索**: 结合 Elasticsearch 和 Milvus 向量数据库进行多维度检索[m
+[31m-- **文档重排序**: 使用先进的重排序算法优化检索结果[m
+[31m-- **智能过滤**: 基于相关性分数和配置参数过滤结果[m
+[31m-[m
+[31m-**核心方法**[m
+[31m-[m
+[31m-```python[m
+[31m-# 查询重写[m
+[31m-async def query_rewrite(cls, query)[m
+[31m-# 返回重写后的查询列表，提高检索效果[m
+[31m-[m
+[31m-# 混合检索[m
+[31m-async def mix_retrival_documents(cls, query_list, knowledges_id, search_field)[m
+[31m-# 结合多种检索方式，返回最相关的文档[m
+[31m-[m
+[31m-# RAG 查询摘要[m
+[31m-async def rag_query_summary(cls, query, knowledges_id, min_score, top_k, needs_query_rewrite)[m
+[31m-# 完整的 RAG 流程，从查询到生成最终答案[m
+[31m-```[m
+[31m-[m
+[31m-**使用场景**[m
+[31m-- 智能问答系统[m
+[31m-- 知识库检索[m
+[31m-- 文档智能分析[m
+[31m-- 内容推荐系统[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 智能代理服务[m
+[31m-[m
+[31m-### 自动构建代理 (AutoBuild)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-AutoBuild 服务提供智能代理的自动化构建功能，通过对话式交互帮助用户创建定制化的智能代理。[m
+[31m-[m
+[31m-**核心组件**[m
+[31m-[m
+[31m-#### AutoBuildManager[m
+[31m-- **连接管理**: 管理 WebSocket 连接和客户端会话[m
+[31m-- **生命周期控制**: 处理代理构建的完整生命周期[m
+[31m-- **异常处理**: 提供完善的错误处理和恢复机制[m
+[31m-[m
+[31m-#### AutoBuildClient[m
+[31m-- **交互式构建**: 通过 LangGraph 实现的多步骤构建流程[m
+[31m-- **智能参数提取**: 自动从用户输入中提取代理配置参数[m
+[31m-- **工具绑定**: 智能选择和绑定合适的工具集[m
+[31m-[m
+[31m-**构建流程**[m
+[31m-1. **引导阶段**: 发送欢迎信息，引导用户开始构建[m
+[31m-2. **名称收集**: 收集并验证代理名称的唯一性[m
+[31m-3. **描述收集**: 收集代理功能描述和需求[m
+[31m-4. **参数提取**: 使用 LLM 智能提取结构化参数[m
+[31m-5. **工具选择**: 基于描述自动选择合适的工具[m
+[31m-6. **代理创建**: 完成代理的创建和配置[m
+[31m-[m
+[31m-**技术特点**[m
+[31m-- 基于 LangGraph 的状态机管理[m
+[31m-- 支持 Function Calling 和 ReAct 模式[m
+[31m-- 实时 WebSocket 通信[m
+[31m-- 智能重名检测[m
+[31m-[m
+[31m-### LingSeek 智能代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-LingSeek 是一个高级智能代理，专门设计用于复杂任务的分解和执行。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-[m
+[31m-#### 引导提示生成[m
+[31m-```python[m
+[31m-async def generate_guide_prompt(self, lingseek_info, feedback=False)[m
+[31m-# 生成智能引导提示，支持反馈优化[m
+[31m-```[m
+[31m-[m
+[31m-#### 任务分解与执行[m
+[31m-```python[m
+[31m-async def generate_tasks(self, lingseek_task)[m
+[31m-# 将复杂任务分解为可执行的步骤[m
+[31m-[m
+[31m-async def submit_lingseek_task(self, lingseek_task)[m
+[31m-# 执行任务并返回结果[m
+[31m-```[m
+[31m-[m
+[31m-**特色功能**[m
+[31m-- **COT 思维链**: 使用思维链方法提高推理准确性[m
+[31m-- **任务图构建**: 自动构建任务依赖关系图[m
+[31m-- **工具集成**: 支持插件和 MCP 服务器集成[m
+[31m-- **增量执行**: 支持任务的增量执行和结果累积[m
+[31m-[m
+[31m-### Mars 智能代理[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-Mars 是一个多功能智能代理，集成了多种专业工具和服务。[m
+[31m-[m
+[31m-**核心特性**[m
+[31m-- **多模型支持**: 支持对话、工具调用和推理模型[m
+[31m-- **中间件架构**: 可扩展的中间件系统[m
+[31m-- **流式处理**: 支持实时流式输出[m
+[31m-- **工具限制**: 内置工具调用限制和安全机制[m
+[31m-[m
+[31m-**服务类型**[m
+[31m-1. **AutoBuild_Agent**: 自动构建功能[m
+[31m-2. **Retrieval_Knowledge**: 知识检索[m
+[31m-3. **AI_News**: AI 新闻服务[m
+[31m-4. **Deep_Search**: 深度搜索[m
+[31m-[m
+[31m-### 深度搜索服务 (DeepSearch)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-DeepSearch 提供高级的网络搜索和研究功能，使用 LangGraph 实现智能搜索流程。[m
+[31m-[m
+[31m-**核心组件**[m
+[31m-[m
+[31m-#### 搜索状态管理[m
+[31m-- **OverallState**: 管理整体搜索状态[m
+[31m-- **QueryGenerationState**: 查询生成状态[m
+[31m-- **ReflectionState**: 反思和评估状态[m
+[31m-- **WebSearchState**: 网络搜索状态[m
+[31m-[m
+[31m-#### 搜索流程[m
+[31m-1. **查询生成**: 基于用户问题生成优化的搜索查询[m
+[31m-2. **并行搜索**: 使用 Tavily API 进行并行网络搜索[m
+[31m-3. **结果反思**: 分析搜索结果，识别知识缺口[m
+[31m-4. **迭代优化**: 根据反思结果进行后续搜索[m
+[31m-5. **答案生成**: 综合所有信息生成最终答案[m
+[31m-[m
+[31m-**技术特点**[m
+[31m-- 集成 Tavily 搜索 API[m
+[31m-- 支持中文搜索优化[m
+[31m-- 智能结果去重和排序[m
+[31m-- 可配置的搜索参数[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 知识检索服务[m
+[31m-[m
+[31m-### 混合检索 (MixRetrieval)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供多种检索方式的统一接口，支持 Elasticsearch 和 Milvus 向量数据库。[m
+[31m-[m
+[31m-**检索方式**[m
+[31m-- **Milvus 检索**: 基于向量相似度的语义检索[m
+[31m-- **Elasticsearch 检索**: 基于关键词的全文检索[m
+[31m-- **混合检索**: 结合两种方式的优势[m
+[31m-[m
+[31m-**核心方法**[m
+[31m-```python[m
+[31m-async def retrival_milvus_documents(cls, query, knowledges_id, search_field)[m
+[31m-async def retrival_es_documents(cls, query, knowledges_id, search_field)[m
+[31m-async def mix_retrival_documents(cls, query_list, knowledges_id, search_field)[m
+[31m-```[m
+[31m-[m
+[31m-### 嵌入服务 (Embedding)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供文本向量化服务，支持批量处理和并发优化。[m
+[31m-[m
+[31m-**特性**[m
+[31m-- **批量处理**: 支持单个文本和批量文本处理[m
+[31m-- **并发控制**: 使用信号量控制并发数量[m
+[31m-- **自动分批**: 大批量数据自动分批处理[m
+[31m-- **异步处理**: 完全异步的处理流程[m
+[31m-[m
+[31m-**使用示例**[m
+[31m-```python[m
+[31m-# 单个文本嵌入[m
+[31m-embedding = await get_embedding("示例文本")[m
+[31m-[m
+[31m-# 批量文本嵌入[m
+[31m-embeddings = await get_embedding(["文本1", "文本2", "文本3"])[m
+[31m-```[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 内存管理服务[m
+[31m-[m
+[31m-### 异步内存 (AsyncMemory)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-AsyncMemory 提供高性能的异步内存管理功能，支持多种内存类型和智能管理。[m
+[31m-[m
+[31m-**内存类型**[m
+[31m-- **语义内存 (SEMANTIC)**: 存储事实和知识[m
+[31m-- **情节内存 (EPISODIC)**: 存储对话历史和事件[m
+[31m-- **程序内存 (PROCEDURAL)**: 存储操作步骤和流程[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-[m
+[31m-#### 内存添加[m
+[31m-```python[m
+[31m-async def add(self, messages, user_id=None, agent_id=None, run_id=None, [m
+[31m-              metadata=None, infer=True, memory_type=None)[m
+[31m-# 智能添加内存，支持自动推理和分类[m
+[31m-```[m
+[31m-[m
+[31m-#### 内存检索[m
+[31m-```python[m
+[31m-async def search(self, query, user_id=None, agent_id=None, run_id=None, [m
+[31m-                 limit=100, filters=None, threshold=None)[m
+[31m-# 基于语义相似度的内存检索[m
+[31m-```[m
+[31m-[m
+[31m-#### 内存管理[m
+[31m-```python[m
+[31m-async def update(self, memory_id, data)  # 更新内存[m
+[31m-async def delete(self, memory_id)        # 删除内存[m
+[31m-async def get_all(self, **filters)       # 获取所有内存[m
+[31m-```[m
+[31m-[m
+[31m-**智能特性**[m
+[31m-- **自动推理**: 智能提取和分类内存内容[m
+[31m-- **去重机制**: 自动检测和处理重复内存[m
+[31m-- **版本控制**: 支持内存历史版本管理[m
+[31m-- **多维过滤**: 支持用户、代理、会话等多维度过滤[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 工具集成服务[m
+[31m-[m
+[31m-### MCP 管理器 (MCPManager)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-MCP (Model Context Protocol) 管理器提供外部工具和服务的集成能力。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-- **多服务器支持**: 同时管理多个 MCP 服务器[m
+[31m-- **工具发现**: 自动发现和注册可用工具[m
+[31m-- **并发调用**: 支持工具的并发执行[m
+[31m-- **错误处理**: 完善的错误处理和恢复机制[m
+[31m-[m
+[31m-**使用流程**[m
+[31m-1. **配置服务器**: 配置 MCP 服务器连接信息[m
+[31m-2. **获取工具**: 自动发现可用工具列表[m
+[31m-3. **调用工具**: 异步并发调用工具[m
+[31m-4. **结果处理**: 统一处理工具执行结果[m
+[31m-[m
+[31m-### 沙箱服务 (Sandbox)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供安全的代码执行环境，支持 Python 代码的安全执行。[m
+[31m-[m
+[31m-**特性**[m
+[31m-- **Pyodide 集成**: 基于 Pyodide 的浏览器端 Python 执行[m
+[31m-- **安全隔离**: 完全隔离的执行环境[m
+[31m-- **实时执行**: 支持实时代码执行和结果返回[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 文档处理服务[m
+[31m-[m
+[31m-### 文档转换服务 (TransformPaper)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供多种文档格式的转换和处理功能。[m
+[31m-[m
+[31m-**支持格式**[m
+[31m-- **PDF 转换**: PDF 文档的解析和转换[m
+[31m-- **DOCX 转换**: Word 文档的处理和转换[m
+[31m-[m
+[31m-**核心组件**[m
+[31m-```python[m
+[31m-# PDF 转换[m
+[31m-convert_pdf.py  # PDF 文档转换处理[m
+[31m-[m
+[31m-# DOCX 转换  [m
+[31m-convert_docx.py # Word 文档转换处理[m
+[31m-```[m
+[31m-[m
+[31m-### Markdown 重写服务[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-智能 Markdown 文档处理和优化服务。[m
+[31m-[m
+[31m-**主要功能**[m
+[31m-- **图片描述生成**: 使用视觉语言模型自动生成图片描述[m
+[31m-- **链接优化**: 自动优化图片链接和引用[m
+[31m-- **批量处理**: 支持批量文档处理[m
+[31m-- **异步优化**: 高效的异步处理流程[m
+[31m-[m
+[31m-**处理流程**[m
+[31m-1. **文档解析**: 解析 Markdown 文档结构[m
+[31m-2. **图片识别**: 识别文档中的图片引用[m
+[31m-3. **描述生成**: 使用 VL 模型生成图片描述[m
+[31m-4. **链接替换**: 替换为优化后的链接[m
+[31m-5. **文档重写**: 生成优化后的文档[m
+[31m-[m
+[31m-### 查询重写服务[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-智能查询优化和重写服务，提高检索效果。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-- **查询扩展**: 自动扩展查询词汇[m
+[31m-- **语义优化**: 基于语义理解优化查询[m
+[31m-- **多样化生成**: 生成多个查询变体[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 云存储服务[m
+[31m-[m
+[31m-### 阿里云 OSS 客户端[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供完整的阿里云对象存储服务集成。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-[m
+[31m-#### 文件操作[m
+[31m-```python[m
+[31m-def upload_file(self, object_name, data)           # 上传文件数据[m
+[31m-def upload_local_file(self, object_name, local_file) # 上传本地文件[m
+[31m-def download_file(self, object_name, local_file)   # 下载文件[m
+[31m-def delete_bucket(self)                            # 删除存储桶[m
+[31m-```[m
+[31m-[m
+[31m-#### 链接管理[m
+[31m-```python[m
+[31m-def sign_url_for_get(self, object_name, expiration=3600)[m
+[31m-# 生成带签名的访问链接[m
+[31m-```[m
+[31m-[m
+[31m-#### 文件管理[m
+[31m-```python[m
+[31m-def list_files_in_folder(self, folder_path)[m
+[31m-# 列出指定文件夹下的所有文件[m
+[31m-```[m
+[31m-[m
+[31m-**特性**[m
+[31m-- **自动配置**: 基于配置文件自动初始化[m
+[31m-- **错误处理**: 完善的异常处理机制[m
+[31m-- **日志记录**: 详细的操作日志记录[m
+[31m-- **安全访问**: 支持签名 URL 和权限控制[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 缓存服务[m
+[31m-[m
+[31m-### Redis 客户端[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供高性能的 Redis 缓存服务集成。[m
+[31m-[m
+[31m-**核心功能**[m
+[31m-[m
+[31m-#### 基础操作[m
+[31m-```python[m
+[31m-def set(self, key, value, expiration=3600)    # 设置键值对[m
+[31m-def get(self, key)                            # 获取值[m
+[31m-def delete(self, key)                         # 删除键[m
+[31m-def incr(self, key, expiration=3600)          # 递增计数[m
+[31m-```[m
+[31m-[m
+[31m-#### 哈希操作[m
+[31m-```python[m
+[31m-def hset(self, name, key, value, mapping, items, expiration)  # 设置哈希[m
+[31m-def hget(self, name, key)                     # 获取哈希值[m
+[31m-def hgetall(self, name)                       # 获取所有哈希值[m
+[31m-```[m
+[31m-[m
+[31m-#### 高级功能[m
+[31m-```python[m
+[31m-def setNx(self, key, value, expiration=3600)  # 仅在不存在时设置[m
+[31m-```[m
+[31m-[m
+[31m-**特性**[m
+[31m-- **连接池管理**: 高效的连接池管理[m
+[31m-- **序列化支持**: 自动 pickle 序列化[m
+[31m-- **过期控制**: 灵活的过期时间设置[m
+[31m-- **集群支持**: 支持 Redis 集群模式[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 工作空间服务[m
+[31m-[m
+[31m-### 简单代理 (SimpleAgent)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-提供轻量级的智能代理功能，适用于简单的对话和任务处理。[m
+[31m-[m
+[31m-### 微信代理 (WechatAgent)[m
+[31m-[m
+[31m-**功能概述**[m
+[31m-专门为微信平台优化的智能代理，支持微信特有的功能和交互模式。[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 最佳实践[m
+[31m-[m
+[31m-### 性能优化[m
+[31m-[m
+[31m-1. **异步处理**: 所有服务都支持异步操作，充分利用异步优势[m
+[31m-2. **批量操作**: 使用批量接口处理大量数据[m
+[31m-3. **缓存策略**: 合理使用 Redis 缓存减少重复计算[m
+[31m-4. **连接池**: 使用连接池管理数据库连接[m
+[31m-[m
+[31m-### 安全考虑[m
+[31m-[m
+[31m-1. **输入验证**: 所有用户输入都经过严格验证[m
+[31m-2. **权限控制**: 基于用户和会话的权限控制[m
+[31m-3. **数据隔离**: 不同用户和会话的数据完全隔离[m
+[31m-4. **安全执行**: 代码执行在安全沙箱环境中[m
+[31m-[m
+[31m-### 监控和日志[m
+[31m-[m
+[31m-1. **详细日志**: 所有操作都有详细的日志记录[m
+[31m-2. **错误追踪**: 完善的错误追踪和报告机制[m
+[31m-3. **性能监控**: 内置性能监控和统计功能[m
+[31m-4. **使用统计**: 详细的使用情况统计和分析[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## 总结[m
+[31m-[m
+[31m-AgentChat 服务架构提供了完整的智能对话和任务处理能力，通过模块化设计实现了高度的可扩展性和可维护性。每个服务都经过精心设计，提供了丰富的功能和灵活的配置选项，能够满足各种复杂的业务需求。[m
+[31m-[m
+[31m-通过合理使用这些服务，您可以构建出功能强大、性能优异的智能应用系统。建议根据具体需求选择合适的服务组合，并遵循最佳实践以获得最佳效果。[m
+\ No newline at end of file[m
+[1mdiff --git a/src/backend/agentchat/config.yaml b/src/backend/agentchat/config.yaml[m
+[1mdeleted file mode 100644[m
+[1mindex 55a6778..0000000[m
+[1m--- a/src/backend/agentchat/config.yaml[m
+[1m+++ /dev/null[m
+[36m@@ -1,138 +0,0 @@[m
+[31m-# 服务配置[m
+[31m-server:[m
+[31m-  host: "127.0.0.1"[m
+[31m-  port: 7860[m
+[31m-  project_name: "AgentChat"[m
+[31m-  version: "2.4.0"[m
+[31m-[m
+[31m-# 数据库配置：MySQL (请根据实际配置更改 endpoint) 如果使用Docker启动服务，请将localhost改成@mysql:3306...[m
+[31m-# 格式：mysql+pymysql://<user>:<password>@<host>:<port>/<database>[m
+[31m-mysql:[m
+[31m-  endpoint: "mysql+pymysql://root:123456@localhost:3306/agentchat" # 同步连接配置[m
+[31m-  async_endpoint: "mysql+aiomysql://root:123456@localhost:3306/agentchat" # 异步连接配置[m
+[31m-[m
+[31m-# 缓存配置：Redis[m
+[31m-redis:[m
+[31m-  endpoint: "redis://localhost:6379" # Redis 连接地址[m
+[31m-[m
+[31m-# 多模型服务配置 (LLM、Embedding、Rerank)[m
+[31m-multi_models:[m
+[31m-  # 对话模型配置[m
+[31m-  conversation_model:[m
+[31m-    api_key: "sk-fc40dd0604f04142a******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"[m
+[31m-    model_name: "qwen-plus"[m
+[31m-  # 工具调用/Function Call 模型配置[m
+[31m-  tool_call_model:[m
+[31m-    api_key: "sk-fc40dd0604f04142a******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"[m
+[31m-    model_name: "qwen-plus"[m
+[31m-  # 复杂推理模型配置[m
+[31m-  reasoning_model:[m
+[31m-    api_key: "sk-6d47d94f4c734357******"[m
+[31m-    base_url: "https://api.deepseek.com/v1"[m
+[31m-    model_name: "deepseek-reasoner"[m
+[31m-  # 文生图模型配置[m
+[31m-  text2image:[m
+[31m-    api_key: "sk-fc40dd0604f04142a******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis"[m
+[31m-    model_name: "wanx2.0-t2i-turbo"[m
+[31m-  # 多模态 (视觉) 模型配置[m
+[31m-  qwen_vl:[m
+[31m-    api_key: "sk-fc40dd0604f04142a******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"[m
+[31m-    model_name: "qwen-vl-plus"[m
+[31m-[m
+[31m-  # Embedding 模型配置 (用于向量化)[m
+[31m-  embedding:[m
+[31m-    api_key: "sk-fc40dd0604f04142a******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"[m
+[31m-    model_name: "text-embedding-v4"[m
+[31m-[m
+[31m-  # Rerank 模型配置 (用于重排序召回结果)[m
+[31m-  rerank:[m
+[31m-    api_key: "sk-fc40dd0604f04142a******"[m
+[31m-    base_url: "https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank"[m
+[31m-    model_name: "gte-rerank-v2"[m
+[31m-[m
+[31m-[m
+[31m-# 外部工具 (Tool) 配置[m
+[31m-tools:[m
+[31m-  # 高德地图天气 API 配置[m
+[31m-  weather:[m
+[31m-    api_key: "fac0ad465078da96a3ec6******"[m
+[31m-    endpoint: "https://restapi.amap.com/v3/weather/weatherInfo?parameters"[m
+[31m-  # Tavily 联网搜索 API 配置 (注意配额限制)[m
+[31m-  tavily:[m
+[31m-    api_key: "tvly-dev-RMf7KBCQLyXhn3******"[m
+[31m-  # SerpApi 上的 Google Search API 配置[m
+[31m-  google:[m
+[31m-    api_key: "cdc3b207606843b4c883849c3a0f833c13057811b*********"[m
+[31m-  # 使用的是aliyun上的快递查询api[m
+[31m-  delivery:[m
+[31m-    api_key: "df695c94fc644d******"[m
+[31m-    endpoint: "https://qyexpress.market.alicloudapi.com/composite/queryexpress"[m
+[31m-  # BoCha 联网搜索 API 配置[m
+[31m-  bocha:[m
+[31m-    api_key: "sk-**********************"[m
+[31m-    endpoint: "https://api.bochaai.com/v1/web-search"[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-# RAG (检索增强生成) 配置[m
+[31m-rag:[m
+[31m-  enable_summary: False # 是否对知识库片段进行摘要[m
+[31m-  enable_elasticsearch: False # 是否启用 Elasticsearch 进行关键词搜索[m
+[31m-[m
+[31m-  retrival:[m
+[31m-    top_k: 5  # 知识库召回的最大数量[m
+[31m-    min_score: 0.2 # 知识库召回结果的最小相似度分数阈值[m
+[31m-[m
+[31m-  split:[m
+[31m-    chunk_size: 500 # 知识库文档分块的最大字符数[m
+[31m-    overlap_size: 100 # 文档分块之间的重叠字符数[m
+[31m-[m
+[31m-  # ES数据库配置，主要做关键词召回[m
+[31m-  elasticsearch:[m
+[31m-    hosts: "http://127.0.0.1:9200" # Elasticsearch 连接地址。如果 'enable_elasticsearch' 为 False，则不需要填写。[m
+[31m-[m
+[31m-  # 向量数据库配置 (Vector DB)[m
+[31m-  vector_db:[m
+[31m-    host: "127.0.0.1"[m
+[31m-    port: "19530"[m
+[31m-    mode: "chroma" # 向量库模式: standalone (Milvus), lite (轻量Milvus), chroma (ChromaDB)[m
+[31m-[m
+[31m-# 阿对象存储 OSS 配置[m
+[31m-storage:[m
+[31m-  mode: "minio" # or oss[m
+[31m-[m
+[31m-  oss:[m
+[31m-    access_key_id: "LTAI5tL85xWWx9gb*******"[m
+[31m-    access_key_secret: "MiKCkLCx9qZzxc*****"[m
+[31m-    endpoint: "oss-cn-beijing.aliyuncs.com"[m
+[31m-    bucket_name: "agentchat" # OSS 存储桶名称[m
+[31m-    base_url: "https://agentchat.oss-cn-beijing.aliyuncs.com" # 访问基础 URL[m
+[31m-[m
+[31m-  minio:[m
+[31m-    access_key_id: "minioadmin"[m
+[31m-    access_key_secret: "minioadmin"[m
+[31m-    endpoint: "127.0.0.1:9000"[m
+[31m-    bucket_name: "agentchat" # minio 存储桶名称[m
+[31m-    base_url: "http://127.0.0.1:9000/agentchat" # 访问基础 URL[m
+[31m-[m
+[31m-# 扩展功能：微信配置 (不添加也可正常运行)[m
+[31m-wechat_config:[m
+[31m-  token: "LiangTian"[m
+[31m-  app_id: "wxf768871******"[m
+[31m-  secret: "063c4df15544235abd9******"[m
+[31m-[m
+[31m-# 追踪工具 Langfuse 配置 (目前版本可能未应用)[m
+[31m-langfuse:[m
+[31m-  trace_name: "agentchat"[m
+[31m-  host: "https://cloud.langfuse.com"[m
+[31m-  public_key: "pk-lf-q3e80e5f-da6d-40cb-8bc1-******" # Langfuse 公钥[m
+[31m-  secret_key: "sk-lf-q3e80e5f-da6d-40cb-8bc1-******" # Langfuse 私钥[m
+[31m-  user_id: "LiangTian" # 用户 ID[m
+[31m-[m
+[31m-# 接口白名单路径[m
+[31m-whitelist_paths: ["/api/v1/login"][m
+[1mdiff --git a/src/backend/agentchat/config/avatars.json b/src/backend/agentchat/config/avatars.json[m
+[1mdeleted file mode 100644[m
+[1mindex 4cd9643..0000000[m
+[1m--- a/src/backend/agentchat/config/avatars.json[m
+[1m+++ /dev/null[m
+[36m@@ -1,12 +0,0 @@[m
+[31m-{[m
+[31m-  "avatars": [[m
+[31m-    "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/user/bubu_1.jpg",[m
+[31m-    "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/user/bubu_2.jpg",[m
+[31m-    "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/user/bubu_3.jpg",[m
+[31m-    "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/user/yier_1.jpg",[m
+[31m-    "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/user/yier_2.jpg",[m
+[31m-    "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/user/yier_3.jpg",[m
+[31m-    "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/user/wushaqi.jpg",[m
+[31m-    "https://agentchat.oss-cn-beijing.aliyuncs.com/icons/user/xiaoba.jpg"[m
+[31m-  ][m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/backend/agentchat/services/rag/handler.py b/src/backend/agentchat/services/rag/handler.py[m
+[1mdeleted file mode 100644[m
+[1mindex b8fd2d3..0000000[m
+[1m--- a/src/backend/agentchat/services/rag/handler.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,151 +0,0 @@[m
+[31m-from loguru import logger[m
+[31m-from typing import Optional[m
+[31m-from agentchat.services.rag.retrieval import MixRetrival[m
+[31m-from agentchat.services.rewrite.query_write import query_rewriter[m
+[31m-from agentchat.services.rag.es_client import client as es_client[m
+[31m-from agentchat.services.rag.vector_db import milvus_client[m
+[31m-from agentchat.services.rag.rerank import Reranker[m
+[31m-from agentchat.settings import app_settings[m
+[31m-[m
+[31m-class RagHandler:[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def query_rewrite(cls, query):[m
+[31m-        query_list = await query_rewriter.rewrite(query)[m
+[31m-        return query_list[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def index_milvus_documents(cls, collection_name, chunks):[m
+[31m-        await milvus_client.insert(collection_name, chunks)[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def index_es_documents(cls, index_name, chunks):[m
+[31m-        await es_client.index_documents(index_name, chunks)[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def mix_retrival_documents(cls, query_list, knowledges_id, search_field="summary"):[m
+[31m-[m
+[31m-        if app_settings.rag.enable_elasticsearch:[m
+[31m-            es_documents, milvus_documents = await MixRetrival.mix_retrival_documents(query_list, knowledges_id, search_field)[m
+[31m-            # 先对ES和Milvus结果分别排序[m
+[31m-            es_documents.sort(key=lambda x: x.score, reverse=True)[m
+[31m-            milvus_documents.sort(key=lambda x: x.score, reverse=True)[m
+[31m-            all_documents = es_documents + milvus_documents[m
+[31m-        else:[m
+[31m-            all_documents = await MixRetrival.retrival_milvus_documents(query_list, knowledges_id, search_field)[m
+[31m-[m
+[31m-        # 合并并去重，保留分数更高的文档[m
+[31m-        documents = [][m
+[31m-        seen_chunk_ids = set()[m
+[31m-[m
+[31m-        # 按分数从高到低排序[m
+[31m-        all_documents.sort(key=lambda x: x.score, reverse=True)[m
+[31m-        [m
+[31m-        # 去重，保留分数最高的[m
+[31m-        for doc in all_documents:[m
+[31m-            if doc.chunk_id not in seen_chunk_ids:[m
+[31m-                seen_chunk_ids.add(doc.chunk_id)[m
+[31m-                documents.append(doc)[m
+[31m-                if len(documents) >= 10:  # 限制返回10个文档[m
+[31m-                    break[m
+[31m-        [m
+[31m-        return documents[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def rag_query_summary(cls, query, knowledges_id, min_score: Optional[float]=None,[m
+[31m-                                top_k: Optional[int]=None, needs_query_rewrite: bool=True):[m
+[31m-        if min_score is None:[m
+[31m-            min_score = app_settings.rag.retrival.get('min_score')[m
+[31m-        if top_k is None:[m
+[31m-            top_k = app_settings.rag.retrival.get('top_k')[m
+[31m-[m
+[31m-        # 查询重写[m
+[31m-        if needs_query_rewrite:[m
+[31m-            rewritten_queries = await cls.query_rewrite(query)[m
+[31m-        else:[m
+[31m-            rewritten_queries = [query][m
+[31m-[m
+[31m-        # 文档检索[m
+[31m-        retrieved_documents = await cls.mix_retrival_documents(rewritten_queries, knowledges_id, "summary")[m
+[31m-[m
+[31m-        # 准备重排序的文档内容[m
+[31m-        documents_to_rerank = [doc.content for doc in retrieved_documents][m
+[31m-[m
+[31m-        # 文档重排序[m
+[31m-        reranked_docs = await Reranker.rerank_documents(query, documents_to_rerank)[m
+[31m-[m
+[31m-        # 过滤结果[m
+[31m-        filtered_results = [][m
+[31m-        # 确保top_k不为None[m
+[31m-        actual_top_k = top_k if top_k is not None else 0[m
+[31m-        if len(reranked_docs) >= actual_top_k:[m
+[31m-            for doc in reranked_docs[:actual_top_k]:[m
+[31m-                if min_score is not None and doc.score >= min_score:[m
+[31m-                    filtered_results.append(doc)[m
+[31m-            # 拼接最终结果[m
+[31m-            final_result = "\n".join(result.content for result in filtered_results)[m
+[31m-            return final_result[m
+[31m-        else:[m
+[31m-            logger.info(f"Recall for summary Field numbers < top k, Start recall use content Field")[m
+[31m-            return await cls.retrieve_ranked_documents(query, knowledges_id, knowledges_id)[m
+[31m-[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def retrieve_ranked_documents(cls, query, collection_names, index_names=None, min_score: Optional[float]=None,[m
+[31m-                        top_k: Optional[int]=None, needs_query_rewrite: bool=True):[m
+[31m-        """[m
+[31m-        处理 RAG 流程：查询重写、文档检索、重排序、结果过滤和拼接。[m
+[31m-[m
+[31m-        Args:[m
+[31m-            query (str): 用户查询。[m
+[31m-            collection_names (list[str]): 向量知识库 集合ID。[m
+[31m-            index_names (list[str]): ES关键词库 集合ID。[m
+[31m-            min_score (float): 文档最低分数阈值，默认为配置中的值。[m
+[31m-            top_k (int): 召回文档的个数。[m
+[31m-            needs_query_rewrite (bool): 是否需要开启Query重写，默认开启[m
+[31m-[m
+[31m-        Returns:[m
+[31m-            str: 拼接后的最终结果。[m
+[31m-            """[m
+[31m-        if min_score is None:[m
+[31m-            min_score = app_settings.rag.retrival.get('min_score')[m
+[31m-        if top_k is None:[m
+[31m-            top_k = app_settings.rag.retrival.get('top_k')[m
+[31m-[m
+[31m-        # 查询重写[m
+[31m-        if needs_query_rewrite:[m
+[31m-            rewritten_queries = await cls.query_rewrite(query)[m
+[31m-        else:[m
+[31m-            rewritten_queries = [query][m
+[31m-[m
+[31m-        # 文档检索[m
+[31m-        retrieved_documents = await cls.mix_retrival_documents(rewritten_queries, collection_names, "content")[m
+[31m-[m
+[31m-        # 准备重排序的文档内容[m
+[31m-        documents_to_rerank = [doc.content for doc in retrieved_documents][m
+[31m-[m
+[31m-        # 文档重排序[m
+[31m-        reranked_docs = await Reranker.rerank_documents(query, documents_to_rerank)[m
+[31m-[m
+[31m-        # 过滤结果[m
+[31m-        filtered_results = [][m
+[31m-        # 确保top_k不为None[m
+[31m-        actual_top_k = top_k if top_k is not None else 0[m
+[31m-        docs_to_process = reranked_docs if len(reranked_docs) <= actual_top_k else reranked_docs[:actual_top_k][m
+[31m-        for doc in docs_to_process:[m
+[31m-            if min_score is not None and doc.score >= min_score:[m
+[31m-                filtered_results.append(doc)[m
+[31m-[m
+[31m-        # 处理空结果[m
+[31m-        if not filtered_results:[m
+[31m-            return "No relevant documents found."[m
+[31m-[m
+[31m-        # 拼接最终结果[m
+[31m-        final_result = "\n".join(result.content for result in filtered_results)[m
+[31m-        return final_result[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def delete_documents_es_milvus(cls, file_id, knowledge_id):[m
+[31m-        if app_settings.rag.enable_elasticsearch:[m
+[31m-            await es_client.delete_documents(file_id, knowledge_id)[m
+[31m-        await milvus_client.delete_by_file_id(file_id, knowledge_id)[m
+[1mdiff --git a/src/backend/agentchat/services/rag/retrieval.py b/src/backend/agentchat/services/rag/retrieval.py[m
+[1mdeleted file mode 100644[m
+[1mindex cd72ee9..0000000[m
+[1m--- a/src/backend/agentchat/services/rag/retrieval.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,45 +0,0 @@[m
+[31m-from agentchat.services.rag.es_client import client as es_client[m
+[31m-from agentchat.services.rag.vector_db import milvus_client[m
+[31m-[m
+[31m-[m
+[31m-class MixRetrival:[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def retrival_milvus_documents(cls, query, knowledges_id, search_field):[m
+[31m-        """从Milvus检索文档"""[m
+[31m-        documents = [][m
+[31m-        queries = query if isinstance(query, list) else [query][m
+[31m-[m
+[31m-        for query in queries:[m
+[31m-            for knowledge_id in knowledges_id:[m
+[31m-                if search_field == "summary":[m
+[31m-                    documents += await milvus_client.search_summary(query, knowledge_id)[m
+[31m-                else:[m
+[31m-                    documents += await milvus_client.search(query, knowledge_id)[m
+[31m-[m
+[31m-        return documents[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def retrival_es_documents(cls, query, knowledges_id, search_field):[m
+[31m-        """从Elasticsearch检索文档"""[m
+[31m-        documents = [][m
+[31m-        queries = query if isinstance(query, list) else [query][m
+[31m-[m
+[31m-        for query in queries:[m
+[31m-            for knowledge_id in knowledges_id:[m
+[31m-                if search_field == "summary":[m
+[31m-                    documents += await es_client.search_documents_summary(query, knowledge_id)[m
+[31m-                else:[m
+[31m-                    documents += await es_client.search_documents(query, knowledge_id)[m
+[31m-[m
+[31m-        return documents[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    async def mix_retrival_documents(cls, query_list, knowledges_id, search_field):[m
+[31m-        es_documents = [][m
+[31m-        milvus_documents = [][m
+[31m-        for query in query_list:[m
+[31m-            es_documents += await cls.retrival_es_documents(query, knowledges_id, search_field)[m
+[31m-            milvus_documents += await cls.retrival_milvus_documents(query, knowledges_id, search_field)[m
+[31m-[m
+[31m-        return es_documents, milvus_documents[m
+[1mdiff --git a/src/backend/agentchat/services/storage/__init__.py b/src/backend/agentchat/services/storage/__init__.py[m
+[1mdeleted file mode 100644[m
+[1mindex 2568d41..0000000[m
+[1m--- a/src/backend/agentchat/services/storage/__init__.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,11 +0,0 @@[m
+[31m-from agentchat.services.storage.oss import OSSClient[m
+[31m-from agentchat.services.storage.minio import MinioClient[m
+[31m-from agentchat.settings import app_settings[m
+[31m-[m
+[31m-if app_settings.storage.mode == "minio":[m
+[31m-    storage_client = MinioClient()[m
+[31m-else:[m
+[31m-    storage_client = OSSClient()[m
+[31m-[m
+[31m-if __name__ == "__main__":[m
+[31m-    storage_client.list_files_in_folder("icons/user/")[m
+\ No newline at end of file[m
+[1mdiff --git a/src/backend/agentchat/services/storage/minio.py b/src/backend/agentchat/services/storage/minio.py[m
+[1mdeleted file mode 100644[m
+[1mindex 98aa01f..0000000[m
+[1m--- a/src/backend/agentchat/services/storage/minio.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,92 +0,0 @@[m
+[31m-import io[m
+[31m-from minio import Minio[m
+[31m-from minio.error import S3Error[m
+[31m-from loguru import logger[m
+[31m-from agentchat.settings import app_settings[m
+[31m-[m
+[31m-class MinioClient:[m
+[31m-    def __init__(self):[m
+[31m-        self.client = Minio([m
+[31m-            secure=False,[m
+[31m-            endpoint=app_settings.storage.minio.endpoint,[m
+[31m-            access_key=app_settings.storage.minio.access_key_id,[m
+[31m-            secret_key=app_settings.storage.minio.access_key_secret,[m
+[31m-        )[m
+[31m-        self.bucket_name = app_settings.storage.minio.bucket_name[m
+[31m-        if not self.client.bucket_exists(self.bucket_name):[m
+[31m-            self.client.make_bucket(self.bucket_name)[m
+[31m-            logger.success(f"Minio Bucket: {self.bucket_name} created success")[m
+[31m-[m
+[31m-[m
+[31m-    def upload_file(self, object_name, data):[m
+[31m-        try:[m
+[31m-            if isinstance(data, (bytes, bytearray)):[m
+[31m-                data_stream = io.BytesIO(data)[m
+[31m-                length = len(data)[m
+[31m-            else:[m
+[31m-                data = data.encode("utf-8") if isinstance(data, str) else data[m
+[31m-                data_stream = io.BytesIO(data)[m
+[31m-                length = len(data)[m
+[31m-            self.client.put_object(self.bucket_name, object_name, data_stream, length)[m
+[31m-            logger.info(f"File uploaded successfully: {object_name}")[m
+[31m-        except S3Error as e:[m
+[31m-            logger.error(f"Failed to upload file: {e}")[m
+[31m-[m
+[31m-    def upload_local_file(self, object_name, local_file):[m
+[31m-        try:[m
+[31m-            self.client.fput_object(self.bucket_name, object_name, local_file)[m
+[31m-            logger.info(f"Local file uploaded successfully: {object_name}")[m
+[31m-        except S3Error as e:[m
+[31m-            logger.error(f"Failed to upload file : {e}")[m
+[31m-[m
+[31m-    def delete_bucket(self):[m
+[31m-        try:[m
+[31m-            self.client.remove_bucket(self.bucket_name)[m
+[31m-            logger.info("Bucket deleted successfully")[m
+[31m-        except S3Error as e:[m
+[31m-            logger.error(f"Failed to delete bucket: {e}")[m
+[31m-[m
+[31m-    def sign_url_for_get(self, object_name, expiration=3600):[m
+[31m-        try:[m
+[31m-            from datetime import timedelta[m
+[31m-            url = self.client.presigned_get_object([m
+[31m-                self.bucket_name, object_name, expires=timedelta(seconds=expiration)[m
+[31m-            )[m
+[31m-            return url[m
+[31m-        except S3Error as e:[m
+[31m-            logger.error(f"Failed to generate GET URL for {object_name}: {e}")[m
+[31m-[m
+[31m-    def download_file(self, object_name, local_file):[m
+[31m-        try:[m
+[31m-            self.client.fget_object(self.bucket_name, object_name, local_file)[m
+[31m-            logger.info(f"File {object_name} downloaded successfully to {local_file}")[m
+[31m-        except S3Error as e:[m
+[31m-            logger.error(f"Failed to download {object_name} to {local_file}: {e}")[m
+[31m-[m
+[31m-    def list_files_in_folder(self, folder_path):[m
+[31m-        """[m
+[31m-        列出指定文件夹下的所有文件（不递归，假设文件夹下没有子目录）[m
+[31m-[m
+[31m-        Args:[m
+[31m-            folder_path (str): 文件夹路径，需以斜杠 / 结尾[m
+[31m-[m
+[31m-        Returns:[m
+[31m-            list: 文件信息列表，每个元素是包含文件名、大小、修改时间等信息的字典[m
+[31m-        """[m
+[31m-        try:[m
+[31m-            if folder_path and not folder_path.endswith('/'):[m
+[31m-                folder_path += '/'[m
+[31m-[m
+[31m-            objects = self.client.list_objects([m
+[31m-                self.bucket_name, prefix=folder_path, recursive=False[m
+[31m-            )[m
+[31m-            files_url = [[m
+[31m-                obj.object_name for obj in objects[m
+[31m-                if not obj.is_dir and not obj.object_name.endswith('/')[m
+[31m-            ][m
+[31m-            return files_url[m
+[31m-        except S3Error as e:[m
+[31m-            logger.error(f"Failed to list files in folder {folder_path}: {e}")[m
+[31m-            return [][m
+[31m-[m
+[31m-[m
+[1mdiff --git a/src/backend/agentchat/services/storage/oss.py b/src/backend/agentchat/services/storage/oss.py[m
+[1mdeleted file mode 100644[m
+[1mindex b28cc3c..0000000[m
+[1m--- a/src/backend/agentchat/services/storage/oss.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,77 +0,0 @@[m
+[31m-import oss2[m
+[31m-from loguru import logger[m
+[31m-from agentchat.settings import app_settings[m
+[31m-[m
+[31m-class OSSClient:[m
+[31m-    def __init__(self):[m
+[31m-        auth = oss2.Auth([m
+[31m-            access_key_id=app_settings.storage.oss.access_key_id,[m
+[31m-            access_key_secret=app_settings.storage.oss.access_key_secret[m
+[31m-        )[m
+[31m-        self.bucket = oss2.Bucket([m
+[31m-            auth=auth,[m
+[31m-            endpoint=app_settings.storage.oss.endpoint,[m
+[31m-            bucket_name=app_settings.storage.oss.bucket_name[m
+[31m-        )[m
+[31m-[m
+[31m-    def upload_file(self, object_name, data):[m
+[31m-        try:[m
+[31m-            result = self.bucket.put_object(object_name, data)[m
+[31m-            logger.info(f"File uploaded successfully, status code: {result.status}")[m
+[31m-        except oss2.exceptions.OssError as e:[m
+[31m-            logger.error(f"Failed to upload file: {e}")[m
+[31m-[m
+[31m-    def upload_local_file(self, object_name, local_file):[m
+[31m-        try:[m
+[31m-            result = self.bucket.put_object_from_file(object_name, local_file)[m
+[31m-            logger.info(f"Local file uploaded successfully, status code: {result.status}")[m
+[31m-        except oss2.exceptions.OssError as e:[m
+[31m-            logger.error(f"Failed to upload file : {e}")[m
+[31m-[m
+[31m-    def delete_bucket(self):[m
+[31m-        try:[m
+[31m-            self.bucket.delete_bucket()[m
+[31m-            logger.info("Bucket deleted successfully")[m
+[31m-        except oss2.exceptions.OssError as e:[m
+[31m-            logger.error(f"Failed to delete bucket: {e}")[m
+[31m-[m
+[31m-    def sign_url_for_get(self, object_name, expiration=3600):[m
+[31m-        try:[m
+[31m-            url = self.bucket.sign_url("GET", object_name, expiration, slash_safe=True)[m
+[31m-            return url[m
+[31m-        except oss2.exceptions.OssError as e:[m
+[31m-            logger.error(f"Failed to generate GET URL for {object_name}: {e}")[m
+[31m-[m
+[31m-    def download_file(self, object_name, local_file):[m
+[31m-        try:[m
+[31m-            self.bucket.get_object_to_file(object_name, local_file)[m
+[31m-            logger.info(f"File {object_name} downloaded successfully to {local_file}")[m
+[31m-        except oss2.exceptions.OssError as e:[m
+[31m-            logger.error(f"Failed to download {object_name} to {local_file}: {e}")[m
+[31m-[m
+[31m-    def list_files_in_folder(self, folder_path):[m
+[31m-        """[m
+[31m-        列出指定文件夹下的所有文件（不递归，假设文件夹下没有子目录）[m
+[31m-[m
+[31m-        Args:[m
+[31m-            folder_path (str): 文件夹路径，需以斜杠 / 结尾[m
+[31m-[m
+[31m-        Returns:[m
+[31m-            list: 文件信息列表，每个元素是包含文件名、大小、修改时间等信息的字典[m
+[31m-        """[m
+[31m-        try:[m
+[31m-            # 确保文件夹路径以斜杠结尾[m
+[31m-            if folder_path and not folder_path.endswith('/'):[m
+[31m-                folder_path += '/'[m
+[31m-[m
+[31m-            files_url = [][m
+[31m-            for obj in oss2.ObjectIterator(self.bucket, prefix=folder_path, delimiter='/'):[m
+[31m-                if not obj.is_prefix():  # 只处理文件，忽略文件夹[m
+[31m-                    files_url.append(obj.key)[m
+[31m-            return [file_url for file_url in files_url if not file_url.endswith('/')][m
+[31m-        except oss2.exceptions.OssError as e:[m
+[31m-            logger.error(f"Failed to list files in folder {folder_path}: {e}")[m
+[31m-            return [][m
+[31m-[m
+[31m-[m
+[31m-[m
