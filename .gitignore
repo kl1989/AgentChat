@@ -13,11 +13,4 @@ memory_db/
 vector_db/
 
 node_modules/
-
-/src/backend/agentchat/config.yaml
-<<<<<<< HEAD
-/src/backend/agentchat/config.yaml
-=======
-src/backend/agentchat/config.yaml
->>>>>>> dev
 src/backend/agentchat/config.yaml
