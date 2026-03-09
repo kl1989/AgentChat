@@ -23,7 +23,7 @@ const agentCardStore = useAgentCardStore()
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
-const itemName = ref("智言平台")
+const itemName = ref("智能平台")
 const showAppCenterMenu = ref(false)
 let appCenterHoverTimer: any = null
 
@@ -199,9 +199,9 @@ watch(
                 <el-dropdown-item command="profile" :icon="User">
                   个人资料
                 </el-dropdown-item>
-<!--                <el-dropdown-item command="settings" :icon="Setting">-->
-<!--                  系统设置-->
-<!--                </el-dropdown-item>-->
+                <el-dropdown-item command="settings" :icon="Setting">
+                  系统设置
+                </el-dropdown-item>
                 <el-dropdown-item divided command="logout" :icon="SwitchButton">
                   退出登录
                 </el-dropdown-item>
@@ -302,36 +302,7 @@ watch(
               </template>
             </el-menu-item>
           </el-menu>
-          
-          <!-- 底部帮助链接 -->
-          <div class="sidebar-footer">
-            <div class="help-links">
-              <a
-                href="https://github.com/Shy2593666979/AgentChat"
-                target="_blank"
-                class="help-link"
-                title="GitHub 仓库"
-              >
-                <img
-                  src="../assets/github.png"
-                  alt="GitHub"
-                  class="help-icon"
-                />
-              </a>
-              <a
-                href="https://shy2593666979.github.io/agentchat-docs/"
-                target="_blank"
-                class="help-link"
-                title="帮助文档"
-              >
-                <img
-                  src="../assets/help.png"
-                  alt="帮助文档"
-                  class="help-icon"
-                />
-              </a>
-            </div>
-          </div>
+                    
         </div>
       </el-col>
       <div class="content">
@@ -353,7 +324,6 @@ watch(
     justify-content: space-between;
     align-items: center;
     height: 64px;
-    background: linear-gradient(180deg, #e0f2fe 0%, #dbeafe 100%);
     padding: 0 24px;
     box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
     position: relative;
@@ -705,7 +675,6 @@ watch(
       flex: 1;
       overflow-y: auto;
       background-color: #ffffff;
-      border-radius: 20px 0 0 0;
       margin-left: 4px;
       box-shadow: -4px 0 16px rgba(0, 0, 0, 0.05);
     }
