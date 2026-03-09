@@ -7,6 +7,7 @@ from langgraph.types import Command
 from langgraph.prebuilt.tool_node import ToolCallRequest
 from langchain.agents import AgentState, create_agent
 from langchain.agents.middleware import wrap_tool_call
+from agentchat.core.agents.system_tools import SYSTEM_TOOLS
 from langchain_core.messages import BaseMessage, AIMessage, ToolMessage, AIMessageChunk
 
 from agentchat.core.callbacks import usage_metadata_callback
@@ -89,7 +90,7 @@ class WorkSpaceSimpleAgent:
 
             self.middlewares = await self.setup_middlewares()
 
-            self.tools = self.plugin_tools + self.mcp_tools
+            self.tools = self.plugin_tools + self.mcp_tools + SYSTEM_TOOLS
             self._initialized = True
             self.react_agent = self.setup_react_agent()
 
@@ -263,13 +264,14 @@ class WorkSpaceSimpleAgent:
         """Determine if it's an MCP tool and return the corresponding tool instance"""
         mcp_names = [tool.name for tool in self.mcp_tools]
         plugin_names = [tool.name for tool in self.plugin_tools]
+        system_tool_names = [tool.name for tool in SYSTEM_TOOLS]
 
         if tool_name in mcp_names:
             return True
-        elif tool_name in plugin_names:
+        elif tool_name in plugin_names or tool_name in system_tool_names:
             return False
         else:
-            raise ValueError(f"Tool '{tool_name}' not found in either MCP or plugin tools.")
+            raise ValueError(f"Tool '{tool_name}' not found in MCP, plugin, or system tools.")
 
     def get_mcp_id_by_tool(self, tool_name):
         for server_name, tools in self.server_dict.items():
